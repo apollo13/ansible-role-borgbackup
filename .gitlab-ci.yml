@@ -7,6 +7,8 @@ image: quay.io/ansible/molecule:2.20.1
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
+  ANSIBLE_FORCE_COLOR: "true"
+  PY_COLORS: 1
 
 services:
   - docker:dind
