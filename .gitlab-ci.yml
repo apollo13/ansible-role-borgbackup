@@ -1,0 +1,20 @@
+---
+stages:
+  - test
+
+image: quay.io/ansible/molecule:2.20.1
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+molecule:
+  stage: test
+  script:
+    - python -V
+    - ansible --version
+    - molecule --version
+    - molecule test
