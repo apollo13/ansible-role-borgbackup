@@ -27,7 +27,7 @@ provisioner:
   lint:
     name: ansible-lint
   inventory:
-    groups_vars:
+    group_vars:
       upstream:
         borgbackup_install_method: upstream
 
