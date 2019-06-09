@@ -6,17 +6,29 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: borgbackup_system
+  - name: centos_borgbackup_system
     image: centos:7
-  - name: borgbackup_upstream
+    groups:
+      - system
+  - name: centos_borgbackup_upstream
     image: centos:7
+    groups:
+      - upstream
+  - name: ubuntu_borgbackup_system
+    image: ubuntu:18.04
+    groups:
+      - system
+  - name: ubuntu_borgbackup_upstream
+    image: ubuntu:18.04
+    groups:
+      - upstream
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   inventory:
-    host_vars:
-      borgbackup_upstream:
+    groups_vars:
+      upstream:
         borgbackup_install_method: upstream
 
 verifier:
