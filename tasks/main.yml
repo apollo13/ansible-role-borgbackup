@@ -1,3 +1,52 @@
 ---
 
 - include_tasks: install_{{ borgbackup_install_method }}.yml
+
+- name: Install ssh-keygen
+  package:
+    name: "{{ borgbackup_sshkeygen_package[ansible_os_family.lower()] }}"
+    state: present
+
+- name: Create borg user & home
+  user:
+    name: "{{ borgbackup_user }}"
+    home: "{{ borgbackup_home }}"
+    move_home: yes
+    generate_ssh_key: yes
+    password_lock: yes
+
+- name: Create borg config & temporary data directories
+  file:
+    path: "{{ borgbackup_home }}/{{ item }}"
+    state: directory
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0700
+  loop:
+    - config
+    - data
+
+- name: Upload initial backup patterns
+  blockinfile:
+    path: "{{ borgbackup_home }}/config/patterns"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    create: yes
+    block: "R {{ borgbackup_home }}/data"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0700
+
+- name: Install borg service files
+  template:
+    src: "{{ item }}.j2"
+    dest: /etc/systemd/system/{{ item }}
+  loop:
+    - borgbackup.service
+    - borgbackup.timer
+  notify: Reload systemd
+
+- name: Enable systemd timer service
+  systemd:
+    name: borgbackup.timer
+    enabled: yes
+    state: started

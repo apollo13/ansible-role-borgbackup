@@ -1,4 +1,5 @@
 ---
+
 dependency:
   name: galaxy
 driver:
@@ -8,20 +9,28 @@ lint:
 platforms:
   - name: centos_borgbackup_system
     image: centos:7
+    command: /sbin/init
     groups:
       - system
+    privileged: True
   - name: centos_borgbackup_upstream
     image: centos:7
+    command: /sbin/init
     groups:
       - upstream
+    privileged: True
   - name: ubuntu_borgbackup_system
     image: ubuntu:18.04
+    command: /sbin/init
     groups:
       - system
+    privileged: True
   - name: ubuntu_borgbackup_upstream
     image: ubuntu:18.04
+    command: /sbin/init
     groups:
       - upstream
+    privileged: True
 provisioner:
   name: ansible
   lint:
@@ -30,6 +39,11 @@ provisioner:
     group_vars:
       upstream:
         borgbackup_install_method: upstream
+      all:
+        borgbackup_config:
+          calendar_spec: "*-*-* 2:00:00"
+          repository: file:///home/backup/test_repo
+          passphrase: test
 
 verifier:
   name: testinfra
