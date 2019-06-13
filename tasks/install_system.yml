@@ -13,5 +13,5 @@
 
 - name: Remove upstream version
   file:
-    name: /usr/local/bin/borgbackup
+    name: /usr/local/bin/borg
     state: absent

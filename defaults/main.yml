@@ -13,3 +13,5 @@ borgbackup_home: "/home/{{ borgbackup_user }}"
 borgbackup_sshkeygen_package:
   redhat: openssh
   debian: openssh-client
+
+borgbackup_path: /usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg

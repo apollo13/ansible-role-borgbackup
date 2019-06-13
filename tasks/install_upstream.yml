@@ -3,7 +3,7 @@
 - name: Download borgbackup
   get_url:
     url: https://github.com/borgbackup/borg/releases/download/{{ borgbackup_upstream_version }}/borg-linux64
-    dest: /usr/local/bin/borgbackup
+    dest: /usr/local/bin/borg
     checksum: "{{ borgbackup_upstream_checksum }}"
     mode: 0755
 

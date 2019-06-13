@@ -6,7 +6,7 @@ Description=Backup using 'borgbackup'
 
 [Service]
 User={{ borgbackup_user }}
-ExecStart=/usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg create -v --stats --compression lz4 --patterns-from {{ borgbackup_home }}/config/patterns ::{now}
+ExecStart={{ borgbackup_path }} create -v --stats --compression lz4 --patterns-from {{ borgbackup_home }}/config/patterns ::{now}
 Type=oneshot
 Environment=BORG_REPO={{ borgbackup_config.repository }}
 Environment=BORG_PASSPHRASE={{ borgbackup_config.passphrase }}

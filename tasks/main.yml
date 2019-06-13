@@ -40,6 +40,7 @@
   template:
     src: "{{ item }}.j2"
     dest: /etc/systemd/system/{{ item }}
+    mode: 0700
   loop:
     - borgbackup.service
     - borgbackup.timer
@@ -50,3 +51,24 @@
     name: borgbackup.timer
     enabled: yes
     state: started
+
+- name: Prepare repository
+  become: yes
+  become_user: "{{ borgbackup_user }}"
+  no_log: no
+  block:
+
+    - name: Check if we already created a repository
+      command: "{{ borgbackup_path }} list {{ borgbackup_config.repository }}"
+      environment:
+        BORG_PASSPHRASE: "{{ borgbackup_config.passphrase }}"
+      ignore_errors: yes
+      changed_when: false
+      when: borgbackup_config.autoinit|default(True)
+      register: borg_repo_check
+
+    - name: Init backup repository
+      command: "{{ borgbackup_path }} init -e repokey-blake2 {{ borgbackup_config.repository }}"
+      environment:
+        BORG_PASSPHRASE: "{{ borgbackup_config.passphrase }}"
+      when: borgbackup_config.autoinit|default(True) and borg_repo_check.rc == 2
