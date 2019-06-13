@@ -2,5 +2,18 @@
 
 - name: Converge
   hosts: all
-  roles:
-    - role: borgbackup
+
+  tasks:
+    - import_role:
+        name: borgbackup
+
+    - name: Configure working backup
+      include_role:
+        name: borgbackup
+        tasks_from: configure.yml
+      vars:
+        service: test_working
+        backup_user: root
+        backup_command: /bin/true
+        paths:
+          - /etc

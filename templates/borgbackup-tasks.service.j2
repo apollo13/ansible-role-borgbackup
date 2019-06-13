@@ -1,7 +1,11 @@
 [Unit]
-Description=Pre backup tasks for 'borgbackup'
+Description=Backup {{ service }}
+Before=borgbackup.service
 
 [Service]
-User={{ borgbackup_user }}
-ExecStart=/bin/true
+User={{ backup_user }}
+ExecStart={{ backup_command }}
 Type=oneshot
+
+[Install]
+WantedBy=borgbackup.service
