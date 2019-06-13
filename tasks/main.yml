@@ -35,11 +35,21 @@
     group: "{{ borgbackup_user }}"
     mode: 0700
 
+- name: Upload environment file for repository & passphrase
+  copy:
+    content: |
+      BORG_REPO={{ borgbackup_config.repository }}
+      BORG_PASSPHRASE={{ borgbackup_config.passphrase }}
+    dest: "{{ borgbackup_home }}/config/environment"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0700
+  no_log: yes
+
 - name: Install borg service files
   template:
     src: "{{ item }}.j2"
     dest: /etc/systemd/system/{{ item }}
-    mode: 0700
   loop:
     - borgbackup.service
     - borgbackup.timer

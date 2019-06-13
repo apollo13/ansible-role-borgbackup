@@ -1,15 +1,11 @@
 [Unit]
 Description=Backup using 'borgbackup'
-#ConditionFileNotEmpty={# restic_home #}/restic_env
-#ConditionPathExists={# restic_home #}/restic_files
-#OnFailure=status-email-user@%n.service
 
 [Service]
 User={{ borgbackup_user }}
-ExecStart={{ borgbackup_path }} create -v --stats --compression lz4 --patterns-from {{ borgbackup_home }}/config/patterns ::{now}
+ExecStart={{ borgbackup_path }} create --verbose --stats --compression lz4 --patterns-from {{ borgbackup_home }}/config/patterns ::{now}
+EnvironmentFile={{ borgbackup_home }}/config/environment
 Type=oneshot
-Environment=BORG_REPO={{ borgbackup_config.repository }}
-Environment=BORG_PASSPHRASE={{ borgbackup_config.passphrase }}
 AmbientCapabilities=CAP_DAC_READ_SEARCH
 ProtectSystem=full
 PrivateTmp=true
