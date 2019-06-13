@@ -53,6 +53,7 @@
   loop:
     - borgbackup.service
     - borgbackup.timer
+    - borgbackup-tasks.service
   notify: Reload systemd
 
 - name: Enable systemd timer service

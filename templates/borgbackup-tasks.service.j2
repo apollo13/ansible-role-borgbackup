@@ -1,0 +1,7 @@
+[Unit]
+Description=Pre backup tasks for 'borgbackup'
+
+[Service]
+User={{ borgbackup_user }}
+ExecStart=/bin/true
+Type=oneshot
