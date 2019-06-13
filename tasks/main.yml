@@ -11,7 +11,6 @@
   user:
     name: "{{ borgbackup_user }}"
     home: "{{ borgbackup_home }}"
-    move_home: yes
     generate_ssh_key: yes
     password_lock: yes
 
@@ -55,7 +54,7 @@
 - name: Prepare repository
   become: yes
   become_user: "{{ borgbackup_user }}"
-  no_log: no
+  no_log: yes
   block:
 
     - name: Check if we already created a repository
