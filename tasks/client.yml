@@ -1,0 +1,81 @@
+---
+
+- name: Install ssh-keygen
+  package:
+    name: "{{ borgbackup_sshkeygen_package[ansible_os_family.lower()] }}"
+    state: present
+
+- name: Create borg user & home
+  user:
+    name: "{{ borgbackup_user }}"
+    home: "{{ borgbackup_home }}"
+    generate_ssh_key: yes
+    password_lock: yes
+
+- name: Create borg config & temporary data directories
+  file:
+    path: "{{ borgbackup_home }}/{{ item }}"
+    state: directory
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0700
+  loop:
+    - config
+    - data
+
+- name: Upload initial backup patterns
+  blockinfile:
+    path: "{{ borgbackup_home }}/config/patterns"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    create: yes
+    block: "R {{ borgbackup_home }}/data"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0600
+
+- name: Upload environment file for repository & passphrase
+  copy:
+    content: |
+      BORG_REPO={{ borgbackup_config.repository }}
+      BORG_PASSPHRASE={{ borgbackup_config.passphrase }}
+    dest: "{{ borgbackup_home }}/config/environment"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0600
+  no_log: yes
+
+- name: Install borg service files
+  template:
+    src: "{{ item }}.j2"
+    dest: /etc/systemd/system/{{ item }}
+  loop:
+    - borgbackup.service
+    - borgbackup.timer
+  notify: Reload systemd
+
+- name: Enable systemd timer service
+  systemd:
+    name: borgbackup.timer
+    enabled: yes
+    state: started
+
+- name: Prepare repository
+  become: yes
+  become_user: "{{ borgbackup_user }}"
+  no_log: yes
+  block:
+
+    - name: Check if we already created a repository
+      command: "{{ borgbackup_path }} list {{ borgbackup_config.repository }}"
+      environment:
+        BORG_PASSPHRASE: "{{ borgbackup_config.passphrase }}"
+      ignore_errors: yes
+      changed_when: false
+      when: borgbackup_config.autoinit|default(True)
+      register: borg_repo_check
+
+    - name: Init backup repository
+      command: "{{ borgbackup_path }} init -e repokey-blake2 {{ borgbackup_config.repository }}"
+      environment:
+        BORG_PASSPHRASE: "{{ borgbackup_config.passphrase }}"
+      when: borgbackup_config.autoinit|default(True) and borg_repo_check.rc == 2

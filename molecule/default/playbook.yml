@@ -14,6 +14,17 @@
       vars:
         service: test_working
         backup_user: root
-        backup_command: /bin/true
+        backup_command: /bin/sh -c "/bin/sleep 5 && /bin/false"
         paths:
           - /etc
+
+    - name: Configure failing backup
+      include_role:
+        name: borgbackup
+        tasks_from: configure.yml
+      vars:
+        service: test_failing
+        backup_user: root
+        backup_command: /bin/sh -c "/bin/sleep 2 && /bin/false"
+        paths:
+          - /home
