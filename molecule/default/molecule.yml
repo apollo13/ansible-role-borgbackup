@@ -1,9 +1,9 @@
 ---
 
 _platform_defaults: &platform_defaults
-    networks:
-      - name: borgbackup_molecule
-    privileged: True
+  networks:
+    - name: borgbackup_molecule
+  privileged: True
 
 dependency:
   name: galaxy
