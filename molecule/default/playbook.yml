@@ -7,7 +7,7 @@
     - borgbackup
 
 - name: Configure clients
-  hosts: clients
+  hosts: client
 
   tasks:
 
