@@ -2,5 +2,8 @@
 
 - include_tasks: install_{{ borgbackup_install_method }}.yml
 
+- include_tasks: server.yml
+  when: borgbackup_server is defined
+
 - include_tasks: client.yml
   when: borgbackup_config is defined

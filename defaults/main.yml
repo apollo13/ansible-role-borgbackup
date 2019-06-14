@@ -10,8 +10,8 @@ borgbackup_upstream_checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2
 borgbackup_user: backup
 borgbackup_home: "/home/{{ borgbackup_user }}"
 
-borgbackup_sshkeygen_package:
-  redhat: openssh
+borgbackup_ssh_package:
+  redhat: openssh-clients
   debian: openssh-client
 
 borgbackup_path: /usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg

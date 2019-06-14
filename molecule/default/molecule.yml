@@ -1,5 +1,10 @@
 ---
 
+_platform_defaults: &platform_defaults
+    networks:
+      - name: borgbackup_molecule
+    privileged: True
+
 dependency:
   name: galaxy
 driver:
@@ -7,30 +12,44 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: centos_borgbackup_system
+  - name: centos-borgbackup-system
     image: centos:7
     command: /sbin/init
     groups:
-      - system
-    privileged: True
-  - name: centos_borgbackup_upstream
+      - client
+    <<: *platform_defaults
+  - name: centos-borgbackup-upstream
     image: centos:7
     command: /sbin/init
     groups:
       - upstream
-    privileged: True
-  - name: ubuntu_borgbackup_system
+      - client
+    <<: *platform_defaults
+  - name: ubuntu-borgbackup-system
     image: ubuntu:18.04
     command: /sbin/init
     groups:
-      - system
-    privileged: True
-  - name: ubuntu_borgbackup_upstream
+      - client
+    <<: *platform_defaults
+  - name: ubuntu-borgbackup-upstream
     image: ubuntu:18.04
     command: /sbin/init
     groups:
       - upstream
-    privileged: True
+      - client
+    <<: *platform_defaults
+  - name: centos-server
+    image: centos:7
+    command: /sbin/init
+    groups:
+      - server
+    <<: *platform_defaults
+  - name: ubuntu-server
+    image: ubuntu:18.04
+    command: /sbin/init
+    groups:
+      - server
+    <<: *platform_defaults
 provisioner:
   name: ansible
   lint:
@@ -39,11 +58,14 @@ provisioner:
     group_vars:
       upstream:
         borgbackup_install_method: upstream
-      all:
+      client:
         borgbackup_config:
           calendar_spec: "*-*-* 2:00:00"
           repository: file:///home/backup/test_repo
           passphrase: test
+          known_hosts_from: centos-server
+      server:
+        borgbackup_server: yes
 
 verifier:
   name: testinfra

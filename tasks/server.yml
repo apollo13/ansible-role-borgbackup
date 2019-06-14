@@ -1,0 +1,18 @@
+---
+
+# This allows for easier testing, SSH server is most likely installed ;)
+- name: Install SSH server
+  package:
+    name: openssh-server
+    state: present
+  register: ssh_server_state
+
+- name: Enable & start SSH server
+  service:
+    name: sshd
+    state: started
+    enabled: yes
+
+- name: Regather facts to get SSH host keys
+  setup:
+    gather_subset: "!all"

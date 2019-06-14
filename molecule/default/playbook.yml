@@ -1,11 +1,15 @@
 ---
 
-- name: Converge
+- name: Install & configure Borg
   hosts: all
 
+  roles:
+    - borgbackup
+
+- name: Configure clients
+  hosts: clients
+
   tasks:
-    - import_role:
-        name: borgbackup
 
     - name: Configure working backup
       include_role:
@@ -14,7 +18,7 @@
       vars:
         service: test_working
         backup_user: root
-        backup_command: /bin/sh -c "/bin/sleep 5 && /bin/false"
+        backup_command: /bin/sh -c "/bin/sleep 5 && /bin/true"
         paths:
           - /etc
 
