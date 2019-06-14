@@ -62,8 +62,17 @@
 - name: Configure and possibly prepare repository
   become: yes
   become_user: "{{ borgbackup_user }}"
-  no_log: yes
   block:
+
+    - name: Configure known_hosts from config
+      known_hosts:
+        name: "{{ item.split()[0] }}"
+        key: "{{ item }}"
+        state: present
+      loop: "{{ borgbackup_config.known_hosts }}"
+      loop_control:
+        label: "{{ ' '.join(item.split()[:2]) }} ..."
+      when: borgbackup_config.known_hosts is defined
 
     - name: Configure known_hosts from inventory server
       known_hosts:
@@ -74,7 +83,9 @@
         - {fact: ssh_host_key_ecdsa_public, ssh_algo: ecdsa-sha2-nistp256}
         - {fact: ssh_host_key_ed25519_public, ssh_algo: ssh-ed25519}
         - {fact: ssh_host_key_rsa_public, ssh_algo: ssh-rsa}
-      when: borgbackup_config.known_hosts_from
+      loop_control:
+        label: "{{ borgbackup_config.known_hosts_from }} {{ item.ssh_algo }} ..."
+      when: borgbackup_config.known_hosts_from is defined
 
     - name: Check if we already created a repository
       command: "{{ borgbackup_path }} list {{ borgbackup_config.repository }}"
@@ -84,9 +95,11 @@
       changed_when: false
       when: borgbackup_config.autoinit|default(True)
       register: borg_repo_check
+      no_log: yes
 
     - name: Init backup repository
       command: "{{ borgbackup_path }} init -e repokey-blake2 {{ borgbackup_config.repository }}"
       environment:
         BORG_PASSPHRASE: "{{ borgbackup_config.passphrase }}"
       when: borgbackup_config.autoinit|default(True) and borg_repo_check.rc == 2
+      no_log: yes

@@ -64,6 +64,8 @@ provisioner:
           repository: file:///home/backup/test_repo
           passphrase: test
           known_hosts_from: centos-server
+          known_hosts:
+            - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
       server:
         borgbackup_server: yes
 
