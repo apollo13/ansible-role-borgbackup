@@ -1,0 +1,10 @@
+---
+
+service:
+  sshd:
+    enabled: true
+    running: true
+
+package:
+  borgbackup:
+    installed: true

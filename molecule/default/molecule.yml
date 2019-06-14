@@ -70,6 +70,6 @@ provisioner:
         borgbackup_server: yes
 
 verifier:
-  name: testinfra
+  name: goss
   lint:
-    name: flake8
+    name: yamllint
