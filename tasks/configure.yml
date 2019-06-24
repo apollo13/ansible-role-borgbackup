@@ -9,8 +9,9 @@
       {% for path in paths %}
       R {{ path }}
       {% endfor %}
-  become: yes
-  become_user: "{{ borgbackup_user }}"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0600
 
 - name: Install backup service
   template:
