@@ -8,13 +8,12 @@
 
 - name: Simplify variables 2/2
   set_fact:
-    _repository_servers: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
     _user: "{{ _server_config.borgbackup_user|default('backup') }}"
     _repo_path: "{{ _server_config.borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
     _borg_executable: "{{ _server_config.borgbackup_path|default((_install_method == 'system')|ternary('/usr', '/usr/local') + '/bin/borg') }}"
     _repo_url: "ssh://{{ _server_config.borgbackup_user|default('backup') }}@{{ _server_config.ansible_facts.fqdn }}/./"
 
-- name: Get public key
+- name: Get client public keys (id_rsa.pub)
   slurp:
     src: "{{ borgbackup_home }}/.ssh/id_rsa.pub"
   register: slurped_key_b64
@@ -26,7 +25,7 @@
   delegate_facts: yes
   # Nice trick to only run once per repository_server (one might call it a slight hack)
   run_once: yes
-  loop: "{{ _repository_servers }}"
+  loop: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
 
 - name: Create borg repository folder
   file:
@@ -39,8 +38,15 @@
 
 - name: Configure SSH to allow the clients to access
   authorized_key:
-    user: "{{ _user }}"
+    user: "{{ i._user }}"
     state: present
-    key: "{{ slurped_key_b64.content|b64decode }}"
-    key_options: 'command="cd {{ _repo_path }}; {{ _borg_executable }} serve --append-only --restrict-to-repository {{ _repo_path }}",restrict'
-  delegate_to: "{{ _repository_server }}"
+    key: "{{ i.slurped_key_b64.content|b64decode }}"
+    key_options: 'command="cd {{ i._repo_path }}; {{ i._borg_executable }} serve --append-only --restrict-to-repository {{ i._repo_path }}",restrict'
+  # Massive hack to implement serial per tasks and prevent concurrency issues
+  # Concurrency issues can happen when multiple clients delegate to the same server
+  delegate_to: "{{ i._repository_server }}"
+  run_once: yes
+  loop: "{{ ansible_play_hosts|map('extract', hostvars)|selectattr('_repository_server', 'defined')|list }}"
+  loop_control:
+    label: "{{ i.inventory_hostname }}"
+    loop_var: i
