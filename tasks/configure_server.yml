@@ -4,13 +4,14 @@
   set_fact:
     _repository_server: "{{ borgbackup_config.repository_server }}"
     _server_config: "{{ hostvars[borgbackup_config.repository_server] }}"
+    _install_method: "{{ hostvars[borgbackup_config.repository_server].borgbackup_install_method|default('system') }}"
 
 - name: Simplify variables 2/2
   set_fact:
     _repository_servers: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
     _user: "{{ _server_config.borgbackup_user|default('backup') }}"
     _repo_path: "{{ _server_config.borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
-    _borg_executable: "{{ _server_config.borgbackup_path|default('/usr/' + ('' if _server_config.borgbackup_install_method|default('system') == 'system' else 'local/') + 'bin/borg') }}"  # noqa 204
+    _borg_executable: "{{ _server_config.borgbackup_path|default((_install_method == 'system')|ternary('/usr', '/usr/local') + '/bin/borg') }}"
     _repo_url: "ssh://{{ _server_config.borgbackup_user|default('backup') }}@{{ _server_config.ansible_facts.fqdn }}/./"
 
 - name: Get public key
