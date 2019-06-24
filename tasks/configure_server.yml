@@ -1,12 +1,17 @@
 ---
 
-- name: Simplify variables
+- name: Simplify variables 1/2
   set_fact:
     _repository_server: "{{ borgbackup_config.repository_server }}"
-    _user: "{{ hostvars[borgbackup_config.repository_server].borgbackup_user|default('backup') }}"
-    _repo_path: "{{ hostvars[borgbackup_config.repository_server].borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
-    _borg_executable: "{{ hostvars[borgbackup_config.repository_server].borgbackup_path|default('/usr/' + ('' if hostvars[borgbackup_config.repository_server].borgbackup_install_method|default('system') == 'system' else 'local/') + 'bin/borg') }}"  # noqa 204
-    _repo_url: "ssh://{{ hostvars[borgbackup_config.repository_server].borgbackup_user|default('backup') }}@{{ hostvars[borgbackup_config.repository_server].ansible_facts.fqdn }}/./"  # noqa 204
+    _server_config: "{{ hostvars[borgbackup_config.repository_server] }}"
+
+- name: Simplify variables 2/2
+  set_fact:
+    _repository_servers: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
+    _user: "{{ _server_config.borgbackup_user|default('backup') }}"
+    _repo_path: "{{ _server_config.borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
+    _borg_executable: "{{ _server_config.borgbackup_path|default('/usr/' + ('' if _server_config.borgbackup_install_method|default('system') == 'system' else 'local/') + 'bin/borg') }}"  # noqa 204
+    _repo_url: "ssh://{{ _server_config.borgbackup_user|default('backup') }}@{{ _server_config.ansible_facts.fqdn }}/./"
 
 - name: Get public key
   slurp:
@@ -20,7 +25,7 @@
   delegate_facts: yes
   # Nice trick to only run once per repository_server (one might call it a slight hack)
   run_once: yes
-  loop: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
+  loop: "{{ _repository_servers }}"
 
 - name: Create borg repository folder
   file:
@@ -30,7 +35,6 @@
     group: "{{ _user }}"
     mode: 0700
   delegate_to: "{{ _repository_server }}"
-  become: yes
 
 - name: Configure SSH to allow the clients to access
   authorized_key:
@@ -39,4 +43,3 @@
     key: "{{ slurped_key_b64.content|b64decode }}"
     key_options: 'command="cd {{ _repo_path }}; {{ _borg_executable }} serve --append-only --restrict-to-repository {{ _repo_path }}",restrict'
   delegate_to: "{{ _repository_server }}"
-  become: yes
