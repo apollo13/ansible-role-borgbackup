@@ -1,17 +1,5 @@
 ---
 
-- name: Install ssh client
-  package:
-    name: "{{ borgbackup_ssh_package[ansible_os_family.lower()] }}"
-    state: present
-
-- name: Create borg user & home
-  user:
-    name: "{{ borgbackup_user }}"
-    home: "{{ borgbackup_home }}"
-    generate_ssh_key: yes
-    password_lock: yes
-
 - name: Create borg config & temporary data directories
   file:
     path: "{{ borgbackup_home }}/{{ item }}"
@@ -74,18 +62,25 @@
         label: "{{ ' '.join(item.split()[:2]) }} ..."
       when: borgbackup_config.known_hosts is defined
 
+    - name: Regather facts to get SSH host keys
+      setup:
+        gather_subset: "!all"
+      delegate_to: "{{ borgbackup_config.repository_server }}"
+      delegate_facts: True
+      when: borgbackup_config.repository_server is defined
+
     - name: Configure known_hosts from inventory server
       known_hosts:
-        name: "{{ borgbackup_config.known_hosts_from }}"
-        key: "{{ borgbackup_config.known_hosts_from }} {{ item.ssh_algo }} {{ hostvars[borgbackup_config.known_hosts_from]['ansible_facts'][item.fact] }}"
+        name: "{{ borgbackup_config.repository_server }}"
+        key: "{{ borgbackup_config.repository_server }} {{ item.ssh_algo }} {{ hostvars[borgbackup_config.repository_server]['ansible_facts'][item.fact] }}"
         state: present
       loop:
         - {fact: ssh_host_key_ecdsa_public, ssh_algo: ecdsa-sha2-nistp256}
         - {fact: ssh_host_key_ed25519_public, ssh_algo: ssh-ed25519}
         - {fact: ssh_host_key_rsa_public, ssh_algo: ssh-rsa}
       loop_control:
-        label: "{{ borgbackup_config.known_hosts_from }} {{ item.ssh_algo }} ..."
-      when: borgbackup_config.known_hosts_from is defined
+        label: "{{ borgbackup_config.repository_server }} {{ item.ssh_algo }} ..."
+      when: borgbackup_config.repository_server is defined
 
     - name: Check if we already created a repository
       command: "{{ borgbackup_path }} list {{ borgbackup_config.repository }}"

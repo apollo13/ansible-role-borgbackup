@@ -2,8 +2,20 @@
 
 - include_tasks: install_{{ borgbackup_install_method }}.yml
 
+- name: Install ssh client
+  package:
+    name: "{{ borgbackup_ssh_package[ansible_os_family.lower()] }}"
+    state: present
+
+- name: Create borg user & home
+  user:
+    name: "{{ borgbackup_user }}"
+    home: "{{ borgbackup_home }}"
+    generate_ssh_key: yes
+    password_lock: yes
+
 - include_tasks: server.yml
-  when: borgbackup_server is defined
+  when: borgbackup_repository_storage is defined
 
 - include_tasks: client.yml
   when: borgbackup_config is defined

@@ -1,6 +1,6 @@
 ---
 
-- name: Install & configure Borg
+- name: Install borgbackup
   hosts: all
 
   roles:

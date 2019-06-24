@@ -1,0 +1,18 @@
+---
+
+- name: Install SSH
+  hosts: server
+
+  tasks:
+    - name: Install SSH server
+      package:
+        name: openssh-server
+        state: present
+      register: ssh_server_state
+
+    - name: Enable & start SSH server
+      service:
+        name: sshd
+        state: started
+        enabled: yes
+
