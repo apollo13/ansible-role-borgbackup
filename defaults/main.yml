@@ -15,3 +15,9 @@ borgbackup_ssh_package:
   debian: openssh-client
 
 borgbackup_path: /usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg
+
+# borgbackup_config:
+#   calendar_spec: "*-*-* 2:00:00" # default
+#   repository: ssh://test@borg-srv-ubuntu/./ # autodetected if repository_server is set
+#   passphrase: test
+#   repository_server: borg-srv-ubuntu

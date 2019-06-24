@@ -1,0 +1,39 @@
+---
+
+- name: Simplify variables
+  set_fact:
+    _repository_server: "{{ borgbackup_config.repository_server }}"
+    _user: "{{ hostvars[borgbackup_config.repository_server].borgbackup_user|default('backup') }}"
+    _repo_path: "{{ hostvars[borgbackup_config.repository_server].borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
+    _borg_executable: "{{ hostvars[borgbackup_config.repository_server].borgbackup_path|default('/usr/' + ('' if hostvars[borgbackup_config.repository_server].borgbackup_install_method|default('system') == 'system' else 'local/') + 'bin/borg') }}"  # noqa 204
+    _repo_url: "ssh://{{ hostvars[borgbackup_config.repository_server].borgbackup_user|default('backup') }}@{{ hostvars[borgbackup_config.repository_server].ansible_facts.fqdn }}/./"  # noqa 204
+
+- name: Get public key
+  slurp:
+    src: "{{ borgbackup_home }}/.ssh/id_rsa.pub"
+  register: slurped_key_b64
+
+- name: Regather facts to get SSH host keys
+  setup:
+    gather_subset: "!all"
+  delegate_to: "{{ _repository_server }}"
+  delegate_facts: True
+
+- name: Create borg repository folder
+  file:
+    path: "{{ _repo_path }}"
+    state: directory
+    owner: "{{ _user }}"
+    group: "{{ _user }}"
+    mode: 0700
+  delegate_to: "{{ _repository_server }}"
+  become: yes
+
+- name: Configure SSH to allow the clients to access
+  authorized_key:
+    user: "{{ _user }}"
+    state: present
+    key: "{{ slurped_key_b64.content|b64decode }}"
+    key_options: 'command="cd {{ _repo_path }}; {{ _borg_executable }} serve --append-only --restrict-to-repository {{ _repo_path }}",restrict'
+  delegate_to: "{{ _repository_server }}"
+  become: yes

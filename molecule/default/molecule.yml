@@ -12,39 +12,43 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: centos-borgbackup-system
+  - name: borg
     image: centos:7
     command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
-  - name: centos-borgbackup-upstream
+  - name: borg-centos-system
     image: centos:7
     command: /sbin/init
     groups:
-      - upstream
       - client
     <<: *platform_defaults
-  - name: ubuntu-borgbackup-system
+  - name: borg-centos-upstream
+    image: centos:7
+    command: /sbin/init
+    groups:
+      - client
+    <<: *platform_defaults
+  - name: borg-ubuntu-system
     image: ubuntu:18.04
     command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
-  - name: ubuntu-borgbackup-upstream
+  - name: borg-ubuntu-upstream
     image: ubuntu:18.04
     command: /sbin/init
     groups:
-      - upstream
       - client
     <<: *platform_defaults
-  - name: centos-server
+  - name: borg-srv-centos
     image: centos:7
     command: /sbin/init
     groups:
       - server
     <<: *platform_defaults
-  - name: ubuntu-server
+  - name: borg-srv-ubuntu
     image: ubuntu:18.04
     command: /sbin/init
     groups:
@@ -55,21 +59,53 @@ provisioner:
   lint:
     name: ansible-lint
   inventory:
-    group_vars:
-      upstream:
-        borgbackup_install_method: upstream
-      client:
+    host_vars:
+      borg:
         borgbackup_config:
-          calendar_spec: "*-*-* 2:00:00"
-          repository: file:///home/backup/test_repo
+          calendar_spec: "*-*-* 8:00:00"
+          repository: ssh://backup@borg-srv-centos/./
           passphrase: test
           known_hosts:
             - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
-          repository_server: centos-server
-      server:
+          autoinit: no
+        borgbackup_user: test
+
+      borg-centos-system:
+        borgbackup_config:
+          repository: ssh://backup@borg-srv-centos/./
+          passphrase: test
+          repository_server: borg-srv-centos
+        borgbackup_user: centos
+
+      borg-centos-upstream:
+        borgbackup_config:
+          repository: ssh://backup@borg-srv-centos/./
+          passphrase: test
+          repository_server: borg-srv-centos
+        borgbackup_install_method: upstream
+        borgbackup_user: centos
+
+      borg-ubuntu-system:
+        borgbackup_config:
+          repository: ssh://test@borg-srv-ubuntu/./
+          passphrase: test
+          repository_server: borg-srv-ubuntu
+
+      borg-ubuntu-upstream:
+        borgbackup_config:
+          repository: ssh://test@borg-srv-ubuntu/./
+          passphrase: test
+          repository_server: borg-srv-ubuntu
+        borgbackup_install_method: upstream
+
+      borg-srv-centos:
         borgbackup_repository_storage: /var/borg
 
+      borg-srv-ubuntu:
+        borgbackup_install_method: upstream
+        borgbackup_user: test
+        borgbackup_repository_storage: /var/borg
 verifier:
-  name: goss
+  name: testinfra
   lint:
-    name: yamllint
+    name: flake8
