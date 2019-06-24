@@ -16,8 +16,11 @@
 - name: Regather facts to get SSH host keys
   setup:
     gather_subset: "!all"
-  delegate_to: "{{ _repository_server }}"
-  delegate_facts: True
+  delegate_to: "{{ item }}"
+  delegate_facts: yes
+  # Nice trick to only run once per repository_server (one might call it a slight hack)
+  run_once: yes
+  loop: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
 
 - name: Create borg repository folder
   file:
