@@ -41,7 +41,12 @@
     user: "{{ i._user }}"
     state: present
     key: "{{ i.slurped_key_b64.content|b64decode }}"
-    key_options: 'command="cd {{ i._repo_path }}; {{ i._borg_executable }} serve --append-only --restrict-to-repository {{ i._repo_path }}",restrict'
+    key_options: >-
+      command="
+      cd {{ i._repo_path }};
+      {{ i._borg_executable }} serve
+      --append-only --restrict-to-repository {{ i._repo_path }}
+      ",restrict'
   # Massive hack to implement serial per tasks and prevent concurrency issues
   # Concurrency issues can happen when multiple clients delegate to the same server
   delegate_to: "{{ i._repository_server }}"

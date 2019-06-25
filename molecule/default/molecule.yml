@@ -67,7 +67,6 @@ provisioner:
           passphrase: test
           known_hosts:
             - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
-          autoinit: no
         borgbackup_user: test
 
       borg-centos-system:
