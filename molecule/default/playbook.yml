@@ -18,9 +18,10 @@
       vars:
         service: test_working
         backup_user: root
-        backup_command: /bin/sh -c "/bin/sleep 5 && /bin/true"
+        backup_command: /bin/true
         paths:
           - /etc
+      when: '"centos" in inventory_hostname'
 
     - name: Configure failing backup
       include_role:
@@ -29,6 +30,7 @@
       vars:
         service: test_failing
         backup_user: root
-        backup_command: /bin/sh -c "/bin/sleep 2 && /bin/false"
+        backup_command: /bin/false
         paths:
           - /home
+      when: '"ubuntu" in inventory_hostname'

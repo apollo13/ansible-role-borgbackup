@@ -14,12 +14,15 @@ borgbackup_ssh_package:
   redhat: openssh-clients
   debian: openssh-client
 
-borgbackup_path: /usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg
+borgbackup_executable: /usr/{% if borgbackup_install_method == "upstream" %}local/{% endif %}bin/borg
 
 borgbackup_calendar_spec: "*-*-* 2:00:00"
-# borgbackup_passphrase:
+borgbackup_directories: ["{{ borgbackup_home }}/data"]
+
+# borgbackup_passphrase: XXX_SECRET_XXX
 # borgbackup_repository_server: borg-srv-ubuntu
 # borgbackup_repository: ssh://test@borg-srv-ubuntu/./ # autodetected if borgbackup_repository_server is set
 # borgbackup_known_hosts:
 #   - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
-borgbackup_directories: ["{{ borgbackup_home }}/data"]
+# borgbackup_management_keys:
+#   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"

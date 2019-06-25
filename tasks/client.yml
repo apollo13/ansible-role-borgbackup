@@ -85,7 +85,7 @@
       when: borgbackup_repository_server is defined
 
     - name: Check if we already created a repository
-      command: "{{ borgbackup_path }} list {{ _repo_url }}"
+      command: "{{ borgbackup_executable }} list {{ _repo_url }}"
       environment:
         BORG_PASSPHRASE: "{{ borgbackup_passphrase }}"
       ignore_errors: yes
@@ -95,7 +95,7 @@
       no_log: yes
 
     - name: Init backup repository
-      command: "{{ borgbackup_path }} init -e repokey-blake2 {{ _repo_url }}"
+      command: "{{ borgbackup_executable }} init -e repokey-blake2 {{ _repo_url }}"
       environment:
         BORG_PASSPHRASE: "{{ borgbackup_passphrase }}"
       when: borgbackup_repository_server is defined and borg_repo_check.rc == 2

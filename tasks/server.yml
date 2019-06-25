@@ -7,3 +7,19 @@
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
     mode: 0700
+
+- name: Configure access to all repositories via management keys
+  authorized_key:
+    user: "{{ borgbackup_user }}"
+    state: present
+    key: "{{ item }}"
+    key_options: >-
+      command="
+      cd {{ borgbackup_repository_storage }};
+      {{ borgbackup_executable }} serve
+      --restrict-to-path {{ borgbackup_repository_storage }}
+      ",restrict'
+  loop: "{{ borgbackup_management_keys }}"
+  loop_control:
+    label: "{{ item.split(' ', 2)[-1] }}"
+  when: borgbackup_management_keys is defined
