@@ -61,40 +61,31 @@ provisioner:
   inventory:
     host_vars:
       borg:
-        borgbackup_config:
-          calendar_spec: "*-*-* 8:00:00"
-          repository: ssh://backup@borg-srv-centos/./
-          passphrase: test
-          known_hosts:
+        borgbackup_calendar_spec: "*-*-* 8:00:00"
+        borgbackup_passphrase: test
+        borgbackup_known_hosts:
             - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
+        borgbackup_repository: ssh://backup@borg-srv-centos/./
         borgbackup_user: test
 
       borg-centos-system:
-        borgbackup_config:
-          repository: ssh://backup@borg-srv-centos/./
-          passphrase: test
-          repository_server: borg-srv-centos
+        borgbackup_passphrase: test
+        borgbackup_repository_server: borg-srv-centos
         borgbackup_user: centos
 
       borg-centos-upstream:
-        borgbackup_config:
-          repository: ssh://backup@borg-srv-centos/./
-          passphrase: test
-          repository_server: borg-srv-centos
+        borgbackup_passphrase: test
+        borgbackup_repository_server: borg-srv-centos
         borgbackup_install_method: upstream
         borgbackup_user: centos
 
       borg-ubuntu-system:
-        borgbackup_config:
-          repository: ssh://test@borg-srv-ubuntu/./
-          passphrase: test
-          repository_server: borg-srv-ubuntu
+        borgbackup_passphrase: test
+        borgbackup_repository_server: borg-srv-ubuntu
 
       borg-ubuntu-upstream:
-        borgbackup_config:
-          repository: ssh://test@borg-srv-ubuntu/./
-          passphrase: test
-          repository_server: borg-srv-ubuntu
+        borgbackup_passphrase: test
+        borgbackup_repository_server: borg-srv-ubuntu
         borgbackup_install_method: upstream
 
       borg-srv-centos:

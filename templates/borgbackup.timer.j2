@@ -2,7 +2,7 @@
 Description=Borgbackup timer
 
 [Timer]
-OnCalendar={{ borgbackup_config.calendar_spec|default("*-*-* 2:00:00") }}
+OnCalendar={{ borgbackup_calendar_spec }}
 RandomizedDelaySec=300
 
 [Install]

@@ -2,9 +2,9 @@
 
 - name: Simplify variables 1/2
   set_fact:
-    _repository_server: "{{ borgbackup_config.repository_server }}"
-    _server_config: "{{ hostvars[borgbackup_config.repository_server] }}"
-    _install_method: "{{ hostvars[borgbackup_config.repository_server].borgbackup_install_method|default('system') }}"
+    _repository_server: "{{ borgbackup_repository_server }}"
+    _server_config: "{{ hostvars[borgbackup_repository_server] }}"
+    _install_method: "{{ hostvars[borgbackup_repository_server].borgbackup_install_method|default('system') }}"
 
 - name: Simplify variables 2/2
   set_fact:
@@ -25,7 +25,7 @@
   delegate_facts: yes
   # Nice trick to only run once per repository_server (one might call it a slight hack)
   run_once: yes
-  loop: "{{ ansible_play_hosts|map('extract', hostvars, ['borgbackup_config', 'repository_server'])|select('defined')|unique|list }}"
+  loop: "{{ ansible_play_hosts|map('extract', hostvars, 'borgbackup_repository_server')|select('defined')|unique|list }}"
 
 - name: Create borg repository folder
   file:

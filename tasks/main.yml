@@ -18,4 +18,4 @@
   when: borgbackup_repository_storage is defined
 
 - include_tasks: client.yml
-  when: borgbackup_config is defined
+  when: borgbackup_repository_server is defined or borgbackup_repository is defined
