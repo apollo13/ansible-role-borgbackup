@@ -64,7 +64,7 @@ provisioner:
         borgbackup_calendar_spec: "*-*-* 8:00:00"
         borgbackup_passphrase: test
         borgbackup_known_hosts:
-            - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
+          - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
         borgbackup_repository: ssh://backup@borg-srv-centos/./
         borgbackup_user: test
 
