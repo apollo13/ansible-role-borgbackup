@@ -1,5 +1,7 @@
 [Unit]
 Description=Backup using 'borgbackup'
+After=borgbackup-tasks.service
+Wants=borgbackup-tasks.service
 
 [Service]
 User={{ borgbackup_user }}

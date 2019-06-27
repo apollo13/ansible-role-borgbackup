@@ -1,11 +1,6 @@
 [Unit]
-Description=Backup task for '{{ service }}'
-Before=borgbackup.service
+Description=Backup tasks collector
 
 [Service]
-User={{ backup_user }}
-ExecStart={{ backup_command }}
+ExecStart=/bin/sh -c "! /bin/systemctl is-failed 'borgbackup-tasks@*'"
 Type=oneshot
-
-[Install]
-WantedBy=borgbackup.service

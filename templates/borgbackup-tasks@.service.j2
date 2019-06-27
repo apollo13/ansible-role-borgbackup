@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup task for '{{ service }}'
+Before=borgbackup-tasks.service
+
+[Service]
+User={{ backup_user }}
+ExecStart={{ backup_command }}
+Type=oneshot
+
+[Install]
+WantedBy=borgbackup-tasks.service

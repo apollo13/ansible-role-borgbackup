@@ -15,14 +15,14 @@
 
 - name: Install backup service
   template:
-    src: borgbackup-tasks.service.j2
-    dest: /etc/systemd/system/borgbackup@{{ service }}.service
+    src: borgbackup-tasks@.service.j2
+    dest: /etc/systemd/system/borgbackup-tasks@{{ service }}.service
   when: backup_command is defined and backup_user is defined
   notify: Reload systemd
 
 - name: Enable backup service
   systemd:
     daemon_reload: yes
-    name: borgbackup@{{ service }}
+    name: borgbackup-tasks@{{ service }}
     enabled: yes
   when: backup_command is defined and backup_user is defined
