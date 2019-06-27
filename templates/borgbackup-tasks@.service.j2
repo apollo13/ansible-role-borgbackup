@@ -3,7 +3,7 @@ Description=Backup task for '{{ service }}'
 Before=borgbackup-tasks.service
 
 [Service]
-User={{ backup_user }}
+User={{ backup_user|default("root") }}
 ExecStart={{ backup_command }}
 Type=oneshot
 

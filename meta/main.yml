@@ -1,0 +1,14 @@
+---
+
+galaxy_info:
+  author: Florian Apolloner & contributors
+  description: Configure Borgbackup
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Ubuntu
+      version:
+        - 18.04
