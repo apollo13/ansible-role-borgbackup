@@ -4,7 +4,7 @@
   hosts: all
 
   roles:
-    - borgbackup
+    - apollo13.borgbackup
 
 - name: Configure clients
   hosts: client
@@ -13,7 +13,7 @@
 
     - name: Configure working backup
       include_role:
-        name: borgbackup
+        name: apollo13.borgbackup
         tasks_from: configure.yml
       vars:
         service: test_working
@@ -25,7 +25,7 @@
 
     - name: Configure failing backup
       include_role:
-        name: borgbackup
+        name: apollo13.borgbackup
         tasks_from: configure.yml
       vars:
         service: test_failing

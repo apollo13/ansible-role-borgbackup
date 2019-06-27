@@ -9,6 +9,8 @@ variables:
   DOCKER_DRIVER: overlay2
   ANSIBLE_FORCE_COLOR: "true"
   PY_COLORS: 1
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/apollo13.borgbackup
+  GIT_DEPTH: 1
 
 services:
   - docker:dind
