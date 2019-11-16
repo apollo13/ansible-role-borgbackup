@@ -20,4 +20,4 @@
 
 - name: Export borgbase variables
   set_fact:
-    _repo_url: "{{ borgbase_repo_creation.data.repoPath }}"
+    borgbackup_repository: "{{ borgbase_repo_creation.data.repoPath }}"

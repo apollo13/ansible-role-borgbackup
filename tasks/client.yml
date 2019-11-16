@@ -73,9 +73,9 @@
 - name: Upload environment file for repository & passphrase
   copy:
     content: |
-      BORG_REPO="{{ _repo_url|default(borgbackup_repository) }}"
+      BORG_REPO="{{ borgbackup_repository }}"
       BORG_PASSPHRASE="{{ borgbackup_passphrase }}"
-      BORG_RSH="ssh -i {{ borgbackup_home }}/config/id_ssh_ed25519 -o UserKnownHostsFile={{ borgbackup_home }}/config/known_hosts"
+      BORG_RSH="ssh -i {{ borgbackup_home }}/config/id_ssh_ed25519 -o UserKnownHostsFile={{ borgbackup_home }}/config/known_hosts -o StrictHostKeyChecking={{ borgbackup_hostkey_checking }}"
     dest: "{{ borgbackup_home }}/config/environment"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"

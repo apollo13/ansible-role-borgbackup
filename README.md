@@ -59,6 +59,7 @@ borgbackup_passphrase: XXX_SECRET_XXX
 borgbackup_calendar_spec: "*-*-* 2:00:00" # default
 borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
 borgbackup_append_only: yes # default
+borgbackup_hostkey_checking: on/off/accept-new (Matches SSH's StrictHostKeyChecking)
 ```
 
 #### Support for borgbase.com

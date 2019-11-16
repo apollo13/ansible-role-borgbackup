@@ -11,7 +11,7 @@
     _user: "{{ _server_config.borgbackup_user|default('borg') }}"
     _repo_path: "{{ _server_config.borgbackup_repository_storage.rstrip('/') }}/{{ inventory_hostname }}"
     _borg_executable: "{{ _server_config.borgbackup_executable|default((_install_method == 'system')|ternary('/usr', '/usr/local') + '/bin/borg') }}"
-    _repo_url: "ssh://{{ _server_config.borgbackup_user|default('borg') }}@{{ _server_config.ansible_facts.fqdn }}/./"
+    borgbackup_repository: "ssh://{{ _server_config.borgbackup_user|default('borg') }}@{{ _server_config.ansible_facts.fqdn }}/./"
 
 - name: Get client public keys (id_ssh_ed25519.pub)
   slurp:

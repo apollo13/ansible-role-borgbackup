@@ -38,3 +38,5 @@ borgbackup_bb_region: eu
 #   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"
 
 borgbackup_auto_init: "{{ borgbackup_repository_server is defined or borgbackup_bb_repo is defined }}"
+
+borgbackup_hostkey_checking: "on"
