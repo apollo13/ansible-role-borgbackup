@@ -1,5 +1,6 @@
 ## 0.3.0 (unreleased)
 
+- Added support for Travis CI.
 - Added support for exclude patterns.
 
 ## 0.2.2 (2019-11-16)
