@@ -34,7 +34,7 @@
 
 - name: Configure exclude patterns
   blockinfile:
-    path: "{{ borgbackup_home }}/config/patterns"
+    path: "{{ borgbackup_home }}/config/excludes"
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     create: yes
     block: "{{'\n'.join(borgbackup_exclude_patterns) }}"
