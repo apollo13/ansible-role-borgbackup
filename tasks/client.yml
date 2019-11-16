@@ -15,6 +15,8 @@
   openssh_keypair:
     path: "{{ borgbackup_home }}/config/id_ssh_ed25519"
     type: ed25519
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
 
 - name: Upload initial backup patterns
   blockinfile:
@@ -28,6 +30,21 @@
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
     mode: 0600
+
+- name: Install borg wrapper script
+  copy:
+    dest: "{{ borgbackup_home }}/config/borg.sh"
+    content: |
+      #!/bin/bash
+      if [[ -z "${BORG_REPO}" ]]; then
+        set -a
+        source {{ borgbackup_home }}/config/environment
+        set +a
+      fi
+      exec {{ borgbackup_executable }} "$@"
+    mode: 0700
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
 
 - name: Install borg service files
   template:
@@ -93,15 +110,9 @@
         label: "{{ borgbackup_repository_server|default('undefined') }} {{ item.ssh_algo }} ..."
       when: borgbackup_repository_server is defined
 
-    - name: Check if we already created a repository
-      shell: "set -a && source {{ borgbackup_home }}/config/environment && {{ borgbackup_executable }} list {{ _repo_url }}"
-      ignore_errors: yes
-      changed_when: false
-      when: borgbackup_repository_server is defined
-      register: borg_repo_check
-      no_log: yes
-
     - name: Init backup repository
-      shell: "set -a && source {{ borgbackup_home }}/config/environment && {{ borgbackup_executable }} init -e repokey-blake2 {{ _repo_url }}"
-      when: borgbackup_repository_server is defined and borg_repo_check.rc == 2
-      no_log: yes
+      command: "{{ borgbackup_home }}/config/borg.sh init --encryption repokey-blake2"
+      register: borg_repo_init
+      failed_when: "borg_repo_init.rc == 2 and 'A repository already exists at ' not in borg_repo_init.stderr|default('')"
+      changed_when: "borg_repo_init.rc == 0"
+      when: borgbackup_repository_server is defined

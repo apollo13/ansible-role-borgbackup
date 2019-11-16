@@ -31,9 +31,12 @@ borgbackup_upstream_checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2
 ```
 If needed the backup user and home directory can be specified (defaults are as shown below):
 ```
-borgbackup_user: backup
-borgbackup_home: "/home/{{ borgbackup_user }}/borg"
+borgbackup_user: borg
+borgbackup_home: "/home/{{ borgbackup_user }}"
 ```
+If the backup user is set to `root`, the borg home directory defaults to `/root/borg`. Either way, the user needs to exist on the system.
+The home directory will be created as needed (NOTE: This is just for borg, it does not change the users $HOME). Initially this role used
+`backup` as the default user, but at least ubuntu docker images already ship with a backup user, resulting in all kinds of weird problems.
 
 #### Client variables
 

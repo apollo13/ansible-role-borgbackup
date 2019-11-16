@@ -4,6 +4,7 @@ _platform_defaults: &platform_defaults
   networks:
     - name: borgbackup_molecule
   privileged: True
+  command: /sbin/init
 
 dependency:
   name: galaxy
@@ -14,43 +15,36 @@ lint:
 platforms:
   - name: borg
     image: centos:7
-    command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
   - name: borg-centos-system
     image: centos:7
-    command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
   - name: borg-centos-upstream
     image: centos:7
-    command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
   - name: borg-ubuntu-system
     image: ubuntu:18.04
-    command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
   - name: borg-ubuntu-upstream
     image: ubuntu:18.04
-    command: /sbin/init
     groups:
       - client
     <<: *platform_defaults
   - name: borg-srv-centos
     image: centos:7
-    command: /sbin/init
     groups:
       - server
     <<: *platform_defaults
   - name: borg-srv-ubuntu
     image: ubuntu:18.04
-    command: /sbin/init
     groups:
       - server
     <<: *platform_defaults
@@ -65,7 +59,7 @@ provisioner:
         borgbackup_passphrase: test
         borgbackup_known_hosts:
           - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
-        borgbackup_repository: ssh://backup@borg-srv-centos/./
+        borgbackup_repository: ssh://borg@borg-srv-centos/./
         borgbackup_user: test
 
       borg-centos-system:
