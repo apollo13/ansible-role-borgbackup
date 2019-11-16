@@ -32,7 +32,7 @@ borgbackup_upstream_checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2
 If needed the backup user and home directory can be specified (defaults are as shown below):
 ```
 borgbackup_user: backup
-borgbackup_home: "/home/{{ borgbackup_user }}"
+borgbackup_home: "/home/{{ borgbackup_user }}/borg"
 ```
 
 #### Client variables
@@ -60,7 +60,7 @@ borgbackup_append_only: yes # default
 
 #### Server variables
 
-The server configuration is rather borging, it allows to specify a storage root via
+The server configuration is rather boring, it allows to specify a storage root via
 ```
 borgbackup_repository_storage: /some/path
 ```

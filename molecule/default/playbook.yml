@@ -3,6 +3,11 @@
 - name: Install borgbackup
   hosts: all
 
+  pre_tasks:
+    - name: Create backup user
+      user:
+        name: "{{ borgbackup_user }}"
+
   roles:
     - apollo13.borgbackup
 

@@ -5,10 +5,6 @@ def test_system_borg_installed(host):
     assert host.package("borgbackup").is_installed
 
 
-def test_borg_user_created(host):
-    assert host.user("backup").home == "/home/backup"
-
-
 def test_borg_backup_storage(host):
     storage = host.file("/var/borg")
     assert storage.exists

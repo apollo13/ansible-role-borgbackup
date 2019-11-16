@@ -9,10 +9,6 @@ def test_upstream_borg_installed(host):
     assert cmd.stdout.strip() == "borg 1.1.10"
 
 
-def test_borg_user_created(host):
-    assert host.user("test").home == "/home/test"
-
-
 def test_borg_backup_storage(host):
     storage = host.file("/var/borg")
     assert storage.exists

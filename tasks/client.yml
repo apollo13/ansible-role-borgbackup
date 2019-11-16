@@ -11,6 +11,11 @@
     - config
     - data
 
+- name: Create backup SSH key
+  openssh_keypair:
+    path: "{{ borgbackup_home }}/config/id_ssh_ed25519"
+    type: ed25519
+
 - name: Upload initial backup patterns
   blockinfile:
     path: "{{ borgbackup_home }}/config/patterns"
@@ -46,8 +51,9 @@
 - name: Upload environment file for repository & passphrase
   copy:
     content: |
-      BORG_REPO={{ _repo_url|default(borgbackup_repository) }}
-      BORG_PASSPHRASE={{ borgbackup_passphrase }}
+      BORG_REPO="{{ _repo_url|default(borgbackup_repository) }}"
+      BORG_PASSPHRASE="{{ borgbackup_passphrase }}"
+      BORG_RSH="ssh -i {{ borgbackup_home }}/config/id_ssh_ed25519 -o UserKnownHostsFile={{ borgbackup_home }}/config/known_hosts"
     dest: "{{ borgbackup_home }}/config/environment"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
@@ -61,6 +67,7 @@
 
     - name: Configure known_hosts from config
       known_hosts:
+        path: "{{ borgbackup_home }}/config/known_hosts"
         name: "{{ item.split()[0] }}"
         key: "{{ item }}"
         state: present
@@ -71,6 +78,7 @@
 
     - name: Configure known_hosts from inventory server
       known_hosts:
+        path: "{{ borgbackup_home }}/config/known_hosts"
         name: "{{ hostvars[borgbackup_repository_server].ansible_facts.fqdn }}"
         key: >-
           {{ hostvars[borgbackup_repository_server].ansible_facts.fqdn }}
@@ -86,9 +94,7 @@
       when: borgbackup_repository_server is defined
 
     - name: Check if we already created a repository
-      command: "{{ borgbackup_executable }} list {{ _repo_url }}"
-      environment:
-        BORG_PASSPHRASE: "{{ borgbackup_passphrase }}"
+      shell: "set -a && source {{ borgbackup_home }}/config/environment && {{ borgbackup_executable }} list {{ _repo_url }}"
       ignore_errors: yes
       changed_when: false
       when: borgbackup_repository_server is defined
@@ -96,8 +102,6 @@
       no_log: yes
 
     - name: Init backup repository
-      command: "{{ borgbackup_executable }} init -e repokey-blake2 {{ _repo_url }}"
-      environment:
-        BORG_PASSPHRASE: "{{ borgbackup_passphrase }}"
+      shell: "set -a && source {{ borgbackup_home }}/config/environment && {{ borgbackup_executable }} init -e repokey-blake2 {{ _repo_url }}"
       when: borgbackup_repository_server is defined and borg_repo_check.rc == 2
       no_log: yes

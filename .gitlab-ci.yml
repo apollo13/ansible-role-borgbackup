@@ -2,7 +2,7 @@
 stages:
   - test
 
-image: quay.io/ansible/molecule:2.20.1
+image: quay.io/ansible/molecule:2.22
 
 variables:
   DOCKER_HOST: tcp://docker:2375
