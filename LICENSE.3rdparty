@@ -1,0 +1,5 @@
+The `borgbase` ansible module is taken from https://github.com/borgbase/ansible-role-borgbackup which is also MIT licensed.
+The current license text can be found at: https://github.com/borgbase/ansible-role-borgbackup/blob/c1fd4e5c80349fb338748daf08cf41cf6a2b6bb4/LICENSE
+
+The `borgbase_api_client` is taken from https://github.com/borgbase/borgbase-api-client which is also MIT licensed.
+The current license text can be found at: https://github.com/borgbase/borgbase-api-client/tree/53730aa38a3c53fd3728e1f72fc943085abbf176#license-mit
