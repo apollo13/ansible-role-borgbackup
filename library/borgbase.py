@@ -81,14 +81,14 @@ query repoList {
 
 
 def get_or_create_ssh_key(client, module):
-    id = module.params["ssh_key"]
+    key_data = module.params["ssh_key"].strip()
     res = client.execute(KEY_DETAILS)
     for i in res["data"]["sshList"]:
-        if i["keyData"] == id:
+        if i["keyData"] == key_data:
             return i["id"], False
 
-    key_name = "Key for %s" % (module.params["repository_name"],)
-    new_key_vars = {"name": key_name, "keyData": module.params["ssh_key"]}
+    key_name = key_data.split(" ", 2)[-1]
+    new_key_vars = {"name": key_name, "keyData": key_data}
     res = client.execute(SSH_ADD, new_key_vars)
     new_key_id = res["data"]["sshAdd"]["keyAdded"]["id"]
     return new_key_id, True
@@ -138,7 +138,7 @@ def main():
     client = GraphQLClient(module.params["token"])
 
     # Setup information for Ansible
-    result = dict(changed=False, data="", type="")
+    result = dict(changed=False, data="")
 
     try:
         # Add new SSH key or get ID of old key
@@ -150,7 +150,8 @@ def main():
         # Test for success and change info
         result["changed"] = changed
         result["data"] = repo
-    except Exception:
+    except Exception as e:
+        result["data"] = str(e)
         module.fail_json(msg="Failed creating new respository.", **result)
     else:
         module.exit_json(**result)

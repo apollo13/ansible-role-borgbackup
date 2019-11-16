@@ -1,3 +1,7 @@
+## 0.2.2 (2019-11-16)
+
+- Fixed key naming on borgbase.com and updated docs.
+
 ## 0.2.1 (2019-11-16)
 
 - Added testing against Centos 8 and Ubuntu 19.10.

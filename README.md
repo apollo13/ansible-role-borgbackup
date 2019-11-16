@@ -1,4 +1,4 @@
-## Borgbackup Ansible Role
+# Borgbackup Ansible Role
 
 This role aims to implement a fully managed `borg` setup. The feature list currently includes:
 
@@ -16,9 +16,9 @@ Other roles can optionally add the following configurations (see examples below)
  * Extra directories to add to the backup.
  * Backup tasks (think of creating a database dump) before the actual backup via arbritrary users.
 
-### Role variables
+## Role variables
 
-#### Common variables
+### Common variables
 
 The role allows installation via the OS package manager (default) as well as directly from upstream (via Github releases):
 
@@ -39,7 +39,7 @@ If the backup user is set to `root`, the borg home directory defaults to `/root/
 The home directory will be created as needed (NOTE: This is just for borg, it does not change the users $HOME). Initially this role used
 `backup` as the default user, but at least ubuntu docker images already ship with a backup user, resulting in all kinds of weird problems.
 
-#### Client variables
+### Client variables
 
 If the server is managed by ansible, the repository can be configured by specifying
 ```
@@ -65,23 +65,23 @@ borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
 borgbackup_append_only: yes # default
 ```
 
-
-#### Support for borgbase.com
+### Support for borgbase.com
 
 To enable support for borgbase.com the following variables need to be defined:
 ```
 borgbackup_bb_repo: borgbase repository name
 borgbackup_bb_apikey: borgbase api key
 ```
-Once those are set `borgbackup_repository` will be defined automatically.
+Once those are set `borgbackup_repository` will be defined automatically. Be aware that this role only _creates_ the repo and key on borgbase.com, it will never modify an existing repository. This means that you can (and should) use a limited API-Token with _Create Only_ permission. It also means that you need one repository per server, which is good to prevent locking conflicts anyways.
 
 Furthermore the creation of the borgbase repository can be controlled via:
 ```
 borgbackup_bb_quota: 1000 # in GB (defaults to undefined resulting in no quota)
 borgbackup_bb_region: eu/us (defaults to eu)
+borgbackup_bb_alertdays: 1 (defaults to undefined leading to no alerts)
 ```
 
-#### Server variables
+### Server variables
 
 The server configuration is rather boring, it allows to specify a storage root via
 ```
@@ -95,7 +95,7 @@ borgbackup_management_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"
 ```
 
-### Registration of extra backup folders as well as pre-backup tasks/programs
+## Registration of extra backup folders as well as pre-backup tasks/programs
 
 The role is written in a way that it can be extended dynamically from other roles. The only requirement is that the `apollo13.borgbackup` role is run once before other roles can extend it.
 
@@ -116,7 +116,7 @@ vars:
 
 The above example configures an extra systemd unit that runs before the backup to execute `pg_dumpall` as `postgresql` and adds `/var/lib/postgresql/backup/` to the path to backup.
 
-### Backup status & monitoring
+## Backup status & monitoring
 
 Since everything is executed via systemd, the status can be checked easily via monitoring systems. The relevant unit are:
 
