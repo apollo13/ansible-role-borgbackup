@@ -62,8 +62,13 @@
     enabled: yes
     state: started
 
-- include_tasks: configure_server.yml
+- name: Configure inventory server for client access
+  include_tasks: configure_server.yml
   when: borgbackup_repository_server is defined
+
+- name: Configure borgbase.com for client access
+  include_tasks: configure_borgbase.yml
+  when: borgbackup_bb_repo is defined
 
 - name: Upload environment file for repository & passphrase
   copy:

@@ -13,4 +13,4 @@
 
 - name: Configure client
   include_tasks: client.yml
-  when: borgbackup_repository_server is defined or borgbackup_repository is defined
+  when: borgbackup_repository_server is defined or borgbackup_repository is defined or borgbackup_bb_repo is defined

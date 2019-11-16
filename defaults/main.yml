@@ -23,9 +23,15 @@ borgbackup_calendar_spec: "*-*-* 2:00:00"
 borgbackup_directories: ["{{ borgbackup_home }}/data"]
 borgbackup_append_only: yes
 
+# borgbackup_repository: ssh://test@borg-srv-ubuntu/./ # autodetected if borgbackup_repository_server or borgbackup_bb_repo is set
 # borgbackup_passphrase: XXX_SECRET_XXX
+
+# borgbackup_bb_repo: borgbase_repository
+# borgbackup_bb_apikey: borgbase api key
+# borgbackup_bb_quota: 1000 # in GB
+borgbackup_bb_region: eu
+
 # borgbackup_repository_server: borg-srv-ubuntu
-# borgbackup_repository: ssh://test@borg-srv-ubuntu/./ # autodetected if borgbackup_repository_server is set
 # borgbackup_known_hosts:
 #   - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
 # borgbackup_management_keys:

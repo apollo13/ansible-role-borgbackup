@@ -61,6 +61,23 @@ borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
 borgbackup_append_only: yes # default
 ```
 
+#### Support for borgbase.com
+
+To enable support for borgbase.com the following variables need to be defined:
+```
+borgbackup_bb_repo: borgbase repository name
+borgbackup_bb_apikey: borgbase api key
+```
+Once those are set `borgbackup_repository` will be defined automatically. Creation of the repository depends on the existance of a file
+named `{{ borgbackup_home }}/data/borgbase_repo_info` which contains the repository URL. This file must stay there, otherwise the repo
+will get recreated (The used borgbase role is not really idempotent and the borgbase API does not allow for filtering in their GraphQL API).
+
+Furthermore the creation of the borgbase repository can be controlled via:
+```
+borgbackup_bb_quota: 1000 # in GB (defaults to undefined resulting in no quota)
+borgbackup_bb_region: eu/us (defaults to eu)
+```
+
 #### Server variables
 
 The server configuration is rather boring, it allows to specify a storage root via
