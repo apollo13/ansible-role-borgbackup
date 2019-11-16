@@ -5,18 +5,11 @@
     src: "{{ borgbackup_home }}/config/id_ssh_ed25519.pub"
   register: slurped_key_b64
 
-- name: Get repo URL from state-file
-  slurp:
-    src: "{{ borgbackup_home }}/data/borgbase_repo_info"
-  ignore_errors: yes
-  register: borgbase_repo_info
-
 - name: Configure borgbase repository
   local_action:
     module: borgbase
     repository_name: "{{ borgbackup_bb_repo }}"
     token: "{{ borgbackup_bb_apikey }}"
-    new_ssh_key: yes
     ssh_key: "{{ slurped_key_b64.content|b64decode }}"
     append_only: "{{ borgbackup_append_only }}"
     quota_enable: "{{ borgbackup_bb_quota is defined}}"
@@ -24,14 +17,7 @@
     region: "{{ borgbackup_bb_region }}"
     alertdays: "{{ borgbackup_bb_alertdays|default(omit) }}"
   register: borgbase_repo_creation
-  when: borgbase_repo_info is failed
 
 - name: Export borgbase variables
   set_fact:
-    _repo_url: "{{ borgbase_repo_creation.data.repoPath if borgbase_repo_info is failed else borgbase_repo_info.content|b64decode }}"
-
-- name: Write borgbase repo info
-  copy:
-    dest: "{{ borgbackup_home }}/data/borgbase_repo_info"
-    content: "{{ _repo_url }}"
-
+    _repo_url: "{{ borgbase_repo_creation.data.repoPath }}"

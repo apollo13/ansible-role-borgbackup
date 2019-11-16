@@ -68,9 +68,7 @@ To enable support for borgbase.com the following variables need to be defined:
 borgbackup_bb_repo: borgbase repository name
 borgbackup_bb_apikey: borgbase api key
 ```
-Once those are set `borgbackup_repository` will be defined automatically. Creation of the repository depends on the existance of a file
-named `{{ borgbackup_home }}/data/borgbase_repo_info` which contains the repository URL. This file must stay there, otherwise the repo
-will get recreated (The used borgbase role is not really idempotent and the borgbase API does not allow for filtering in their GraphQL API).
+Once those are set `borgbackup_repository` will be defined automatically.
 
 Furthermore the creation of the borgbase repository can be controlled via:
 ```
