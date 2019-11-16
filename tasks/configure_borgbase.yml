@@ -6,16 +6,16 @@
   register: slurped_key_b64
 
 - name: Configure borgbase repository
-  local_action:
-    module: borgbase
+  borgbase:
     repository_name: "{{ borgbackup_bb_repo }}"
     token: "{{ borgbackup_bb_apikey }}"
     ssh_key: "{{ slurped_key_b64.content|b64decode }}"
     append_only: "{{ borgbackup_append_only }}"
-    quota_enable: "{{ borgbackup_bb_quota is defined}}"
+    quota_enable: "{{ borgbackup_bb_quota is defined }}"
     quota: "{{ borgbackup_bb_quota|default(omit) }}"
     region: "{{ borgbackup_bb_region }}"
     alertdays: "{{ borgbackup_bb_alertdays|default(omit) }}"
+  delegate_to: localhost
   register: borgbase_repo_creation
 
 - name: Export borgbase variables

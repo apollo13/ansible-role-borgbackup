@@ -9,6 +9,8 @@ galaxy_info:
     - name: EL
       versions:
         - 7
+        - 8
     - name: Ubuntu
       version:
         - 18.04
+        - 19.10

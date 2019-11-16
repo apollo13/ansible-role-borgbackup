@@ -71,11 +71,8 @@
   when: borgbackup_bb_repo is defined
 
 - name: Upload environment file for repository & passphrase
-  copy:
-    content: |
-      BORG_REPO="{{ borgbackup_repository }}"
-      BORG_PASSPHRASE="{{ borgbackup_passphrase }}"
-      BORG_RSH="ssh -i {{ borgbackup_home }}/config/id_ssh_ed25519 -o UserKnownHostsFile={{ borgbackup_home }}/config/known_hosts -o StrictHostKeyChecking={{ borgbackup_hostkey_checking }}"
+  template:
+    src: environment.j2
     dest: "{{ borgbackup_home }}/config/environment"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
