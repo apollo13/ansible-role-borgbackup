@@ -115,4 +115,4 @@
       register: borg_repo_init
       failed_when: "borg_repo_init.rc == 2 and 'A repository already exists at ' not in borg_repo_init.stderr|default('')"
       changed_when: "borg_repo_init.rc == 0"
-      when: borgbackup_repository_server is defined
+      when: borgbackup_auto_init

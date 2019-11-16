@@ -30,3 +30,5 @@ borgbackup_append_only: yes
 #   - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
 # borgbackup_management_keys:
 #   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"
+
+borgbackup_auto_init: "{{ borgbackup_repository_server is defined }}"

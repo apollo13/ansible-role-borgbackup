@@ -7,8 +7,10 @@
     name: "{{ borgbackup_ssh_package[ansible_os_family.lower()] }}"
     state: present
 
-- include_tasks: server.yml
+- name: Configure server
+  include_tasks: server.yml
   when: borgbackup_repository_storage is defined
 
-- include_tasks: client.yml
+- name: Configure client
+  include_tasks: client.yml
   when: borgbackup_repository_server is defined or borgbackup_repository is defined
