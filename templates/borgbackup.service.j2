@@ -5,7 +5,10 @@ Wants=borgbackup-tasks.service
 
 [Service]
 User={{ borgbackup_user }}
-ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4 --patterns-from {{ borgbackup_home }}/config/patterns ::{now}
+ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4 \
+  --patterns-from {{ borgbackup_home }}/config/patterns \
+  --exclude-from {{ borgbackup_home }}/config/excludes \
+  ::{now}
 EnvironmentFile={{ borgbackup_home }}/config/environment
 Type=oneshot
 AmbientCapabilities=CAP_DAC_READ_SEARCH

@@ -19,7 +19,7 @@
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
 
-- name: Upload initial backup patterns
+- name: Configure backup directories
   blockinfile:
     path: "{{ borgbackup_home }}/config/patterns"
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -28,6 +28,16 @@
       {% for folder in borgbackup_directories %}
       R {{ folder }}
       {% endfor %}
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: 0600
+
+- name: Configure exclude patterns
+  blockinfile:
+    path: "{{ borgbackup_home }}/config/patterns"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    create: yes
+    block: "{{'\n'.join(borgbackup_exclude_patterns) }}"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
     mode: 0600
@@ -56,6 +66,9 @@
     - borgbackup.service
     - borgbackup.timer
   notify: Reload systemd
+
+- name: Flush handlers to reload systemd
+  meta: flush_handlers
 
 - name: Enable systemd timer service
   systemd:

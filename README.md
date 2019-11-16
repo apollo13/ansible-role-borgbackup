@@ -57,11 +57,12 @@ borgbackup_hostkey_checking: ask/off/accept-new # (Matches SSH's StrictHostKeyCh
 Not that the default of `borgbackup_hostkey_checking` is set to `ask` to ensure that host keys are verified, ie configured via `borgbackup_known_hosts`.
 Alternatively one can set it to `accept-new` to activate a "trust on first use" behavior.
 
-The following example shows how to configure passphrase, schedule times and backup directories:
+The following example shows how to configure extra options:
 ```
 borgbackup_passphrase: XXX_SECRET_XXX
-borgbackup_calendar_spec: "*-*-* 2:00:00" # default
+borgbackup_calendar_spec: "*-*-* 2:00:00" # default, pattern is in systemd-timer format
 borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
+borgbackup_exclude_patterns: [] # default, see borg help patterns, uses fnmatch-style format
 borgbackup_append_only: yes # default
 ```
 
@@ -71,6 +72,8 @@ To enable support for borgbase.com the following variables need to be defined:
 ```
 borgbackup_bb_repo: borgbase repository name
 borgbackup_bb_apikey: borgbase api key
+borgbackup_hostkey_checking: accept-new # Otherwise host-key checking will fail since we don't know the host-key
+                                        # Alternatively connect manually via ssh after running the playbook and accept the hostkey
 ```
 Once those are set `borgbackup_repository` will be defined automatically. Be aware that this role only _creates_ the repo and key on borgbase.com, it will never modify an existing repository. This means that you can (and should) use a limited API-Token with _Create Only_ permission. It also means that you need one repository per server, which is good to prevent locking conflicts anyways.
 
