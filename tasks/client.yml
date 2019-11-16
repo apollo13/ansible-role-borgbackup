@@ -18,6 +18,8 @@
     type: ed25519
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
+  # Hack for https://github.com/ansible/ansible/issues/64969 to make action idempotent
+  changed_when: False
 
 - name: Configure backup directories
   blockinfile:
