@@ -11,7 +11,7 @@ galaxy_info:
     - name: EL
       versions:
         - 7
-        # - 8 Should work, but needs adjusting for molecule
+        - 8
     - name: Ubuntu
       versions:
         - bionic

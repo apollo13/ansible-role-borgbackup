@@ -3,6 +3,7 @@
 This role aims to implement a fully managed `borg` setup. The feature list currently includes:
 
  * Client & server configuration, whereas each client gets their own repository.
+ * Support for automatically creating repositories on borgbase.com.
  * Backups happens as unprivileged user.
  * Automatic configuration of `known_hosts` so even initial connections are a success.
  * Initialization of the repository on the clients.
@@ -51,7 +52,10 @@ In cases where the server is managed outside of ansible, one needs to configure 
 borgbackup_repository: ssh://test@borgbackup.cloud/~/storage
 borgbackup_known_hosts:
   - "borgbackup.cloud ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
+borgbackup_hostkey_checking: ask/off/accept-new # (Matches SSH's StrictHostKeyChecking, defaults to ask)
 ```
+Not that the default of `borgbackup_hostkey_checking` is set to `ask` to ensure that host keys are verified, ie configured via `borgbackup_known_hosts`.
+Alternatively one can set it to `accept-new` to activate a "trust on first use" behavior.
 
 The following example shows how to configure passphrase, schedule times and backup directories:
 ```
@@ -59,8 +63,8 @@ borgbackup_passphrase: XXX_SECRET_XXX
 borgbackup_calendar_spec: "*-*-* 2:00:00" # default
 borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
 borgbackup_append_only: yes # default
-borgbackup_hostkey_checking: on/off/accept-new (Matches SSH's StrictHostKeyChecking)
 ```
+
 
 #### Support for borgbase.com
 

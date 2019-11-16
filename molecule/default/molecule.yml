@@ -24,7 +24,7 @@ platforms:
       - client
     <<: *platform_defaults
   - name: borg-centos-upstream
-    image: centos:7
+    image: centos:8
     groups:
       - client
     <<: *platform_defaults

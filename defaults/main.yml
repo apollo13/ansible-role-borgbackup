@@ -39,4 +39,4 @@ borgbackup_bb_region: eu
 
 borgbackup_auto_init: "{{ borgbackup_repository_server is defined or borgbackup_bb_repo is defined }}"
 
-borgbackup_hostkey_checking: "on"
+borgbackup_hostkey_checking: "ask"
