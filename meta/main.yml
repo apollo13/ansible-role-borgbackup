@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: apollo13.borgbackup
+  role_name: borgbackup
   author: Florian Apolloner & contributors
   description: Configure Borgbackup
   license: MIT
