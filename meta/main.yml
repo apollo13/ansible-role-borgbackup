@@ -1,6 +1,8 @@
 ---
+dependencies: []
 
 galaxy_info:
+  role_name: apollo13.borgbackup
   author: Florian Apolloner & contributors
   description: Configure Borgbackup
   license: MIT
@@ -9,8 +11,13 @@ galaxy_info:
     - name: EL
       versions:
         - 7
-        - 8
+        # - 8 Should work, but needs adjusting for molecule
     - name: Ubuntu
-      version:
-        - 18.04
-        - 19.10
+      versions:
+        - bionic
+        - eoan
+  galaxy_tags:
+    - borgbackup
+    - backup
+    - system
+    - server
