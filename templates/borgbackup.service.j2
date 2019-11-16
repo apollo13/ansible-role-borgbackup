@@ -5,7 +5,7 @@ Wants=borgbackup-tasks.service
 
 [Service]
 User={{ borgbackup_user }}
-ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4 \
+ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4 --noatime \
   --patterns-from {{ borgbackup_home }}/config/patterns \
   --exclude-from {{ borgbackup_home }}/config/excludes \
   ::{now}
