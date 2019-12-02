@@ -35,9 +35,15 @@ If needed the backup user and home directory can be specified (defaults are as s
 borgbackup_user: borg
 borgbackup_home: "/home/{{ borgbackup_user }}"
 ```
-If the backup user is set to `root`, the borg home directory defaults to `/root/borg`. Either way, the user needs to exist on the system.
-The home directory will be created as needed (NOTE: This is just for borg, it does not change the users $HOME). Initially this role used
-`backup` as the default user, but at least ubuntu docker images already ship with a backup user, resulting in all kinds of weird problems.
+If the backup user is set to `root`, the borg home directory defaults to `/root/borg`.
+
+**Attention:** This role does not create the user you choose; this has to be done manually before being able to use this role. For instance:
+```
+- name: Create user for borgbackup
+  user:
+    name: "{{ borgbackup_user }}"
+    state: present
+```
 
 ### Client variables
 
