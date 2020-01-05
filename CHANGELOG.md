@@ -1,5 +1,6 @@
-## 0.3.0 (unreleased)
+## 1.0.0 (2020-01-05)
 
+- INCOMPATIBLE: Requires at least ansible 2.8 due to the usage of a new module.
 - Added support for Travis CI.
 - Added support for exclude patterns.
 
