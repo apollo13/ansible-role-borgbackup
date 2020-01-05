@@ -3,8 +3,17 @@
 _platform_defaults: &platform_defaults
   networks:
     - name: borgbackup_molecule
-  privileged: True
+  privileged: true
   command: /sbin/init
+  volumes:
+    - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  tmpfs:
+    # disabled because it is mounted as noexec which breaks the borg upstream binary
+    # - /tmp
+    - /run
+  tty: True
+  environment:
+    container: docker
 
 dependency:
   name: galaxy
@@ -14,37 +23,22 @@ lint:
   name: yamllint
 platforms:
   - name: borg
-    image: centos:7
+    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
-  - name: borg-centos-system
-    image: centos:7
+  - name: borg-system
+    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
-  - name: borg-centos-upstream
-    image: centos:8
+  - name: borg-upstream
+    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
-  - name: borg-ubuntu-system
-    image: ubuntu:18.04
-    groups:
-      - client
-    <<: *platform_defaults
-  - name: borg-ubuntu-upstream
-    image: ubuntu:19.10
-    groups:
-      - client
-    <<: *platform_defaults
-  - name: borg-srv-centos
-    image: centos:7
-    groups:
-      - server
-    <<: *platform_defaults
-  - name: borg-srv-ubuntu
-    image: ubuntu:18.04
+  - name: borg-srv
+    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - server
     <<: *platform_defaults
@@ -59,38 +53,25 @@ provisioner:
         borgbackup_passphrase: test
         borgbackup_known_hosts:
           - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
-        borgbackup_repository: ssh://borg@borg-srv-centos/./
+        borgbackup_repository: ssh://borg@borg-srv/./
         borgbackup_user: test
 
-      borg-centos-system:
+      borg-system:
         borgbackup_passphrase: test
-        borgbackup_repository_server: borg-srv-centos
-        borgbackup_user: centos
+        borgbackup_repository_server: borg-srv
+        borgbackup_user: test
 
-      borg-centos-upstream:
+      borg-upstream:
         borgbackup_passphrase: test
-        borgbackup_repository_server: borg-srv-centos
+        borgbackup_repository_server: borg-srv
         borgbackup_install_method: upstream
-        borgbackup_user: centos
+        borgbackup_user: test
 
-      borg-ubuntu-system:
-        borgbackup_passphrase: test
-        borgbackup_repository_server: borg-srv-ubuntu
-
-      borg-ubuntu-upstream:
-        borgbackup_passphrase: test
-        borgbackup_repository_server: borg-srv-ubuntu
-        borgbackup_install_method: upstream
-
-      borg-srv-centos:
+      borg-srv:
         borgbackup_repository_storage: /var/borg
         borgbackup_management_keys:
           - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"
 
-      borg-srv-ubuntu:
-        borgbackup_install_method: upstream
-        borgbackup_user: test
-        borgbackup_repository_storage: /var/borg
 verifier:
   name: testinfra
   lint:

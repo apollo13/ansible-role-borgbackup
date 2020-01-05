@@ -5,10 +5,18 @@ services: docker
 env:
   global:
     - ROLE_NAME: borgbackup
+  matrix:
+    - MOLECULE_DISTRO: centos:7
+    - MOLECULE_DISTRO: centos:8
+    - MOLECULE_DISTRO: ubuntu:18.04
+    - MOLECULE_DISTRO: ubuntu:19.10
+    - MOLECULE_DISTRO: debian:buster
+    # - MOLECULE_DISTRO: debian:sid
+    - MOLECULE_DISTRO: fedora:31
 
 install:
   # Install test dependencies.
-  - pip install molecule docker
+  - pip install ansible>=2.8 molecule[docker]
 
 before_script:
   # Use actual Ansible Galaxy role name for the project directory.

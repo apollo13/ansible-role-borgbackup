@@ -1,8 +1,4 @@
-testinfra_hosts = ["borg-srv-centos"]
-
-
-def test_system_borg_installed(host):
-    assert host.package("borgbackup").is_installed
+testinfra_hosts = ["borg-srv"]
 
 
 def test_borg_backup_storage(host):

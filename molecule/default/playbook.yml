@@ -26,7 +26,7 @@
         backup_command: /bin/true
         paths:
           - /etc
-      when: '"centos" in inventory_hostname'
+      when: '"system" in inventory_hostname'
 
     - name: Configure failing backup
       include_role:
@@ -38,4 +38,4 @@
         backup_command: /bin/false
         paths:
           - /home
-      when: '"ubuntu" in inventory_hostname'
+      when: '"upstream" in inventory_hostname'
