@@ -1,10 +1,15 @@
 ---
 
 _platform_defaults: &platform_defaults
+  image: rocketduck/molecule-images/${MOLECULE_DISTRO:-centos:8}
+  pull: true
+  pre_build_image: true
+  registry:
+    url: registry.gitlab.com
+  override_command: false
   networks:
     - name: borgbackup_molecule
   privileged: true
-  command: /sbin/init
   volumes:
     - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
   tmpfs:
@@ -23,22 +28,18 @@ lint:
   name: yamllint
 platforms:
   - name: borg
-    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
   - name: borg-system
-    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
   - name: borg-upstream
-    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - client
     <<: *platform_defaults
   - name: borg-srv
-    image: ${MOLECULE_DISTRO:-centos:8}
     groups:
       - server
     <<: *platform_defaults
