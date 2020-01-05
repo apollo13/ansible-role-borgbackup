@@ -1,11 +1,9 @@
 ---
 
 _platform_defaults: &platform_defaults
-  image: rocketduck/molecule-images/${MOLECULE_DISTRO:-centos:8}
+  image: registry.gitlab.com/rocketduck/molecule-images/${MOLECULE_DISTRO:-centos:8}
   pull: true
   pre_build_image: true
-  registry:
-    url: registry.gitlab.com
   override_command: false
   networks:
     - name: borgbackup_molecule
