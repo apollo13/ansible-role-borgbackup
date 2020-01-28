@@ -30,12 +30,11 @@ If upstream is chosen, one needs to specify version and checksum (defaults to ve
 borgbackup_upstream_version: 1.1.10
 borgbackup_upstream_checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2d6a597c75a67a876ef9af
 ```
-If needed the backup user and home directory can be specified (defaults are as shown below):
+If needed the backup user can be specified:
 ```
 borgbackup_user: borg
-borgbackup_home: "/home/{{ borgbackup_user }}"
 ```
-If the backup user is set to `root`, the borg home directory defaults to `/root/borg`. If the chosen user does not have the rights to read all files required to backup it is possible to set `borgbackup_use_cap_dac_read_search: yes` which allows unprivileged users to read all files when the systemd unit executes. This is prefered over running as `root`.
+For client machines, this is the user executing borgbackup and for server machines this is the user that runs `borg serve` when the client connects to it over SSH.
 
 **Attention:** This role does not create the user you choose; this has to be done manually before being able to use this role. For instance:
 ```
@@ -46,6 +45,12 @@ If the backup user is set to `root`, the borg home directory defaults to `/root/
 ```
 
 ### Client variables
+
+At a minimum it is required to set backup directories as well as a passphrase per client:
+```
+borgbackup_passphrase: XXX_SECRET_XXX
+borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
+```
 
 If the server is managed by ansible, the repository can be configured by specifying
 ```
@@ -60,18 +65,18 @@ borgbackup_known_hosts:
   - "borgbackup.cloud ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
 borgbackup_hostkey_checking: ask/off/accept-new # (Matches SSH's StrictHostKeyChecking, defaults to ask)
 ```
-Not that the default of `borgbackup_hostkey_checking` is set to `ask` to ensure that host keys are verified, ie configured via `borgbackup_known_hosts`.
+Note that the default of `borgbackup_hostkey_checking` is set to `ask` to ensure that host keys are verified, ie configured via `borgbackup_known_hosts`.
 Alternatively one can set it to `accept-new` to activate a "trust on first use" behavior.
 
 The following example shows how to configure extra options:
 ```
-borgbackup_passphrase: XXX_SECRET_XXX
-borgbackup_calendar_spec: "*-*-* 2:00:00" # default, pattern is in systemd-timer format
-borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
+borgbackup_calendar_spec: "*-*-* 2:00:00" # default, pattern is in systemd-timer format and describes when to run borgbackup
 borgbackup_exclude_patterns: [] # default, see borg help patterns, uses fnmatch-style format
-borgbackup_append_only: yes # default
+borgbackup_append_only: yes # default, matches the borg append-only behavior
 borgbackup_use_cap_dac_read_search: no # default
 ```
+
+**Attention:** It is recommended to either use `root` or a dedicated backup user (the role defaults to using `borg`). Since the unprivileged `borg` user could only read it's own files, `borgbackup_use_cap_dac_read_search` can be set to use `yes` which will give the running users the permission to read all files when executed via the systemd-timer.
 
 ### Support for borgbase.com
 
