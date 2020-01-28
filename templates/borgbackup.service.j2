@@ -11,7 +11,9 @@ ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4
   ::{now}
 EnvironmentFile={{ borgbackup_home }}/config/environment
 Type=oneshot
+{% if borgbackup_use_cap_dac_read_search %}
 AmbientCapabilities=CAP_DAC_READ_SEARCH
+{% endif %}
 ProtectSystem=full
 PrivateTmp=true
 PrivateDevices=true

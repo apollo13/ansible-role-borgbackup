@@ -35,7 +35,7 @@ If needed the backup user and home directory can be specified (defaults are as s
 borgbackup_user: borg
 borgbackup_home: "/home/{{ borgbackup_user }}"
 ```
-If the backup user is set to `root`, the borg home directory defaults to `/root/borg`.
+If the backup user is set to `root`, the borg home directory defaults to `/root/borg`. If the chosen user does not have the rights to read all files required to backup it is possible to set `borgbackup_use_cap_dac_read_search: yes` which allows underprivileged users to read all files when the systemd unit executes. This is prefered over running as `root`.
 
 **Attention:** This role does not create the user you choose; this has to be done manually before being able to use this role. For instance:
 ```
@@ -70,6 +70,7 @@ borgbackup_calendar_spec: "*-*-* 2:00:00" # default, pattern is in systemd-timer
 borgbackup_directories: ["{{ borgbackup_home }}/data"] # default
 borgbackup_exclude_patterns: [] # default, see borg help patterns, uses fnmatch-style format
 borgbackup_append_only: yes # default
+borgbackup_use_cap_dac_read_search: no # default
 ```
 
 ### Support for borgbase.com

@@ -1,3 +1,7 @@
+## 2.0.0 (2020-01-28)
+
+- INCOMPATIBLE: Disabled DAC_READ_SEARCH cap by default, use borgbackup_use_cap_dac_read_search to reenable.
+
 ## 1.0.0 (2020-01-05)
 
 - INCOMPATIBLE: Requires at least ansible 2.8 due to the usage of a new module.
