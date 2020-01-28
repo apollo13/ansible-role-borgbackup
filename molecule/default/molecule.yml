@@ -54,17 +54,20 @@ provisioner:
           - "dummy ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE"
         borgbackup_repository: ssh://borg@borg-srv/./
         borgbackup_user: test
+        borgbackup_use_cap_dac_read_search: yes
 
       borg-system:
         borgbackup_passphrase: test
         borgbackup_repository_server: borg-srv
         borgbackup_user: test
+        borgbackup_use_cap_dac_read_search: yes
 
       borg-upstream:
         borgbackup_passphrase: test
         borgbackup_repository_server: borg-srv
         borgbackup_install_method: upstream
         borgbackup_user: test
+        borgbackup_use_cap_dac_read_search: yes
 
       borg-srv:
         borgbackup_repository_storage: /var/borg
