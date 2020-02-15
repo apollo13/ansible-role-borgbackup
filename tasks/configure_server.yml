@@ -2,7 +2,6 @@
 
 - name: Simplify variables 1/2
   set_fact:
-    _repository_server: "{{ borgbackup_repository_server }}"
     _server_config: "{{ hostvars[borgbackup_repository_server] }}"
     _install_method: "{{ hostvars[borgbackup_repository_server].borgbackup_install_method|default('system') }}"
 
@@ -34,24 +33,18 @@
     owner: "{{ _user }}"
     group: "{{ _user }}"
     mode: 0700
-  delegate_to: "{{ _repository_server }}"
+  delegate_to: "{{ borgbackup_repository_server }}"
 
 - name: Configure SSH to allow the clients to access
   authorized_key:
-    user: "{{ i._user }}"
+    user: "{{ _user }}"
     state: present
-    key: "{{ i.slurped_key_b64.content|b64decode }}"
+    key: "{{ slurped_key_b64.content|b64decode }}"
     key_options: >-
       command="
-      cd {{ i._repo_path }};
-      {{ i._borg_executable }} serve
-      {% if borgbackup_append_only %}--append-only{% endif %} --restrict-to-repository {{ i._repo_path }}
+      cd {{ _repo_path }};
+      {{ _borg_executable }} serve
+      {% if borgbackup_append_only %}--append-only{% endif %} --restrict-to-repository {{ _repo_path }}
       ",restrict'
-  # Massive hack to implement serial per tasks and prevent concurrency issues
-  # Concurrency issues can happen when multiple clients delegate to the same server
-  delegate_to: "{{ i._repository_server }}"
-  run_once: yes
-  loop: "{{ ansible_play_hosts|map('extract', hostvars)|selectattr('_repository_server', 'defined')|list }}"
-  loop_control:
-    label: "{{ i.inventory_hostname }}"
-    loop_var: i
+  delegate_to: "{{ borgbackup_repository_server }}"
+  throttle: 1

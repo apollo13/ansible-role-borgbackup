@@ -69,10 +69,8 @@ provisioner:
         borgbackup_repository_storage: /var/borg
         borgbackup_management_keys:
           - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElvcKplWycItag/MP7gYUCy95WIhMM1OFKbZ/j/ykFE adminuser"
-
 verifier:
   name: testinfra
-
 lint: |
     yamllint .
     ansible-lint
