@@ -5,8 +5,6 @@
     name: epel-release
     state: present
   when: ansible_os_family == "RedHat" and ansible_distribution != "Fedora"
-  # Hack for https://github.com/ansible/ansible/issues/64963 to make action idempotent
-  changed_when: False
 
 - name: Install borgbackup
   package:
