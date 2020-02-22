@@ -22,8 +22,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
   - name: borg
     groups:
@@ -43,8 +41,6 @@ platforms:
     <<: *platform_defaults
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   inventory:
     host_vars:
       borg:
@@ -76,5 +72,8 @@ provisioner:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+
+lint: |
+    yamllint .
+    ansible-lint
+    flake8
