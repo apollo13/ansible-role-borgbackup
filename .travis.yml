@@ -1,5 +1,7 @@
 ---
 language: python
+os: linux
+
 services: docker
 
 branches:
@@ -9,7 +11,7 @@ branches:
 env:
   global:
     - ROLE_NAME: borgbackup
-  matrix:
+  jobs:
     - MOLECULE_DISTRO: centos:7
     - MOLECULE_DISTRO: centos:8
     - MOLECULE_DISTRO: ubuntu:18.04
