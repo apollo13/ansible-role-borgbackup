@@ -1,4 +1,7 @@
-#!/usr/bin/python
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.borgbase_api_client.client import GraphQLClient
+from ansible.module_utils.borgbase_api_client.mutations import SSH_ADD
+from ansible.module_utils.borgbase_api_client.queries import KEY_DETAILS
 
 DOCUMENTATION = """
 ---
@@ -32,12 +35,6 @@ EXAMPLES = """
     region: us
   delegate_to: localhost
 """
-
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.borgbase_api_client.client import GraphQLClient
-from ansible.module_utils.borgbase_api_client.mutations import SSH_ADD
-from ansible.module_utils.borgbase_api_client.queries import KEY_DETAILS
-
 
 REPO_ADD = """
 mutation repoAdd(
