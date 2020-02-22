@@ -133,8 +133,8 @@ The above example configures an extra systemd unit that runs before the backup t
 
 ## Backup status & monitoring
 
-Since everything is executed via systemd, the status can be checked easily via monitoring systems. The relevant unit are:
+Since everything is executed via systemd, the status can be checked easily via monitoring systems. The relevant units are:
 
  * `borgbackup.service` the actual run of `borgbackup`.
- * `borgbackup-tasks.service` as placeholder that collects the exit status of the pre backup programs.
+ * `borgbackup-tasks.service` is a placeholder that collects the exit status of the pre backup programs.
  * `borgbackup-tasks@<task_name.service>` Individual backup tasks as registered in the example above.
