@@ -6,7 +6,7 @@ services: docker
 
 branches:
   only:
-  - master
+    - master
 
 env:
   global:

@@ -1,3 +1,5 @@
+---
+
 name: CI
 
 on:
@@ -27,20 +29,20 @@ jobs:
       MOLECULE_DISTRO: ${{ matrix.molecule-distro }}
 
     steps:
-    - name: Configure variables
-      run: echo "::set-output name=checkout_path::$ROLE_NAME"
-      id: config
+      - name: Configure variables
+        run: echo "::set-output name=checkout_path::$ROLE_NAME"
+        id: config
 
-    - uses: actions/checkout@v2
-      with:
-        path: ${{ steps.config.outputs.checkout_path }}
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ steps.config.outputs.checkout_path }}
 
-    - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v1
 
-    - name: Install dependencies
-      run: python -m pip install ansible>=2.9.5 molecule[docker,lint] testinfra
+      - name: Install dependencies
+        run: python -m pip install ansible>=2.9.5 molecule[docker,lint] testinfra
 
-    - name: Molecule test
-      run: |
-        cd $ROLE_NAME
-        molecule test
+      - name: Molecule test
+        run: |
+          cd $ROLE_NAME
+          molecule test
