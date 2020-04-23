@@ -12,17 +12,18 @@
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
     mode: 0600
+  when: paths is defined
 
 - name: Install backup service
   template:
     src: borgbackup-tasks@.service.j2
-    dest: /etc/systemd/system/borgbackup-tasks@{{ service }}.service
-  when: backup_command is defined and backup_user is defined
+    dest: /etc/systemd/system/borgbackup-tasks@{{ service|mandatory }}.service
+  when: backup_command is defined
   notify: Reload systemd
 
 - name: Enable backup service
   systemd:
     daemon_reload: yes
-    name: borgbackup-tasks@{{ service }}
+    name: borgbackup-tasks@{{ service|mandatory }}
     enabled: yes
-  when: backup_command is defined and backup_user is defined
+  when: backup_command is defined

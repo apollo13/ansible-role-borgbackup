@@ -1,6 +1,10 @@
+## 3.0.2 (2020-04-23)
+
+- Made `backup_user` and `paths` actually optional when used from `configure.yml`.
+
 ## 3.0.1 (2020-04-23)
 
-- Updated default borg version to 1.1.11
+- Updated default borg version to 1.1.11.
 
 ## 3.0.0 (2020-02-22)
 
