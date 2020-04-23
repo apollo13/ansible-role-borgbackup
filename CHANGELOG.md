@@ -1,3 +1,7 @@
+## 3.0.1 (2020-04-23)
+
+- Updated default borg version to 1.1.11
+
 ## 3.0.0 (2020-02-22)
 
 - INCOMPATIBLE: Requires at least ansible 2.9 due to the usage of a new throttle keyword.

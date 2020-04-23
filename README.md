@@ -25,10 +25,10 @@ The role allows installation via the OS package manager (default) as well as dir
 ```
 borgbackup_install_method: system|upstream
 ```
-If upstream is chosen, one needs to specify version and checksum (defaults to version `1.1.10`):
+If upstream is chosen, one needs to specify version and checksum (defaults to version `1.1.11`):
 ```
-borgbackup_upstream_version: 1.1.10
-borgbackup_upstream_checksum: sha256:6338d67aad4b5cd327b25ea363e30f0ed4abc425ce2d6a597c75a67a876ef9af
+borgbackup_upstream_version: 1.1.11
+borgbackup_upstream_checksum: sha256:7848d1788b5d7f2ae99a599a87992cab4f01584fe5eb393819fceaecf076433b
 ```
 If needed the backup user can be specified:
 ```
