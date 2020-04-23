@@ -73,5 +73,5 @@ verifier:
   name: testinfra
 lint: |
     yamllint .
-    ansible-lint
-    flake8
+    ansible-lint .
+    flake8 .

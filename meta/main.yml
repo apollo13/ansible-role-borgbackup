@@ -14,11 +14,11 @@ galaxy_info:
         - 8
     - name: Fedora
       versions:
-        - 31
+        - 32
     - name: Ubuntu
       versions:
         - bionic
-        - eoan
+        - focal
     - name: Debian
       versions:
         - buster
