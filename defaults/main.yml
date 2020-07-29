@@ -43,3 +43,8 @@ borgbackup_auto_init: "{{ borgbackup_repository_server is defined or borgbackup_
 borgbackup_hostkey_checking: "ask"
 
 borgbackup_use_cap_dac_read_search: no
+
+# configure borgbackup to send keep alives over ssh
+# see https://docs.borgbase.com/faq/#my-ssh-connection-breaks-after-a-long-backup-or-prune-operation for details
+borgbackup_ssh_server_alive_interval: 10
+borgbackup_ssh_server_alive_count_max: 30
