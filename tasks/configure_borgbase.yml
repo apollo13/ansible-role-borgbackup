@@ -18,6 +18,11 @@
   delegate_to: localhost
   register: borgbase_repo_creation
 
+- name: Wait for DNS to propagate
+  pause:
+    seconds: 10
+  when: borgbase_repo_creation is changed
+
 - name: Export borgbase variables
   set_fact:
     borgbackup_repository: "{{ borgbase_repo_creation.data.repoPath }}"
