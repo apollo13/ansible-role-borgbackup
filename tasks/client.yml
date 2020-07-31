@@ -47,11 +47,9 @@
     dest: "{{ borgbackup_home }}/config/borg.sh"
     content: |
       #!/bin/bash
-      if [[ -z "${BORG_REPO}" ]]; then
-        set -a
-        source {{ borgbackup_home }}/config/environment
-        set +a
-      fi
+      set -a
+      source {{ borgbackup_home }}/config/environment
+      set +a
       exec {{ borgbackup_executable }} "$@"
     mode: 0700
     owner: "{{ borgbackup_user }}"
