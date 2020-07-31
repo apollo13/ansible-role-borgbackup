@@ -23,6 +23,7 @@ borgbackup_calendar_spec: "*-*-* 2:00:00"
 borgbackup_directories: ["{{ borgbackup_home }}/data"]
 borgbackup_exclude_patterns: []
 borgbackup_append_only: yes
+borgbackup_remote_ratelimit: 0
 
 # borgbackup_repository: ssh://test@borg-srv-ubuntu/./ # autodetected if borgbackup_repository_server or borgbackup_bb_repo is set
 # borgbackup_passphrase: XXX_SECRET_XXX

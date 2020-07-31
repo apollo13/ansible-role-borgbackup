@@ -1,3 +1,7 @@
+## 3.0.4 (2020-07-31)
+
+- Added support for rate limiting uploads via `borgbackup_remote_ratelimit`.
+
 ## 3.0.3 (2020-07-29)
 
 - Wait 10 seconds for DNS to propagate after creating a borgbase repository.
@@ -16,7 +20,7 @@
 
 ## 2.0.0 (2020-01-28)
 
-- INCOMPATIBLE: Disabled DAC_READ_SEARCH cap by default, use borgbackup_use_cap_dac_read_search to reenable.
+- INCOMPATIBLE: Disabled `DAC_READ_SEARCH` cap by default, use `borgbackup_use_cap_dac_read_search` to reenable.
 
 ## 1.0.0 (2020-01-05)
 

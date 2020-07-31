@@ -5,7 +5,8 @@ Wants=borgbackup-tasks.service
 
 [Service]
 User={{ borgbackup_user }}
-ExecStart={{ borgbackup_executable }} create --verbose --stats --compression lz4 --noatime \
+ExecStart={{ borgbackup_executable }}{% if borgbackup_remote_ratelimit %} --remote-ratelimit={{ borgbackup_remote_ratelimit }}{% endif %} \
+  create --verbose --stats --compression lz4 --noatime \
   --patterns-from {{ borgbackup_home }}/config/patterns \
   --exclude-from {{ borgbackup_home }}/config/excludes \
   ::{now}

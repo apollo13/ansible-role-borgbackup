@@ -74,6 +74,7 @@ borgbackup_calendar_spec: "*-*-* 2:00:00" # default, pattern is in systemd-timer
 borgbackup_exclude_patterns: [] # default, see borg help patterns, uses fnmatch-style format
 borgbackup_append_only: yes # default, matches the borg append-only behavior
 borgbackup_use_cap_dac_read_search: no # default
+borgbackup_remote_ratelimit: 0 # limit upload bandwidth during backup creation (kiByte/s, requires Borg 1.1)
 ```
 
 **Attention:** It is recommended to either use `root` or a dedicated backup user (the role defaults to using `borg`). Since the unprivileged `borg` user could only read it's own files, `borgbackup_use_cap_dac_read_search` can be set to use `yes` which will give the running users the permission to read all files when executed via the systemd-timer.
