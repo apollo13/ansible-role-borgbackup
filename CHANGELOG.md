@@ -1,3 +1,7 @@
+## 3.0.3 (2020-07-29)
+
+- Wait 10 seconds for DNS to propagate after creating a borgbase repository.
+
 ## 3.0.2 (2020-04-23)
 
 - Made `backup_user` and `paths` actually optional when used from `configure.yml`.
