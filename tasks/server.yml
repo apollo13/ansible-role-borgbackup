@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
-    mode: 0700
+    mode: "0700"
 
 - name: Configure access to all repositories via management keys
   authorized_key:
