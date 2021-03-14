@@ -25,6 +25,8 @@ borgbackup_directories: ["{{ borgbackup_home }}/data"]
 borgbackup_exclude_patterns: []
 borgbackup_append_only: yes
 borgbackup_remote_ratelimit: 0
+# system unit to execute on failure
+# borgbackup_systemd_onfailure_unit: status-email-user@%n.service
 
 # borgbackup_repository: ssh://test@borg-srv-ubuntu/./ # autodetected if borgbackup_repository_server or borgbackup_bb_repo is set
 # borgbackup_passphrase: XXX_SECRET_XXX
@@ -50,6 +52,3 @@ borgbackup_use_cap_dac_read_search: no
 # see https://docs.borgbase.com/faq/#my-ssh-connection-breaks-after-a-long-backup-or-prune-operation for details
 borgbackup_ssh_server_alive_interval: 10
 borgbackup_ssh_server_alive_count_max: 30
-
-# system unit to execute on failure
-# borgbackup_systemd_onfailure_unit: status-email-user@%n.service
