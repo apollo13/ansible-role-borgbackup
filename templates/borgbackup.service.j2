@@ -2,6 +2,7 @@
 Description=Backup using 'borgbackup'
 After=borgbackup-tasks.service
 Wants=borgbackup-tasks.service
+{% if borgbackup_systemd_onfailure_unit is defined %}OnFailure={{ borgbackup_systemd_onfailure_unit }}{% endif %}
 
 [Service]
 User={{ borgbackup_user }}

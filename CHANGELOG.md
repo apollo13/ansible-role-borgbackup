@@ -1,3 +1,7 @@
+## 3.x.x (xxx-xx-xx)
+
+ - Added support for `OnFailure` in systemd services.
+
 ## 3.0.5 (2021-03-14)
 
  - Updated default borg version to 1.1.15.

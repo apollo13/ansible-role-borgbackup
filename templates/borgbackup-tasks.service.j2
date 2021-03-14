@@ -1,5 +1,6 @@
 [Unit]
 Description=Backup tasks collector
+{% if borgbackup_systemd_onfailure_unit is defined %}OnFailure={{ borgbackup_systemd_onfailure_unit }}{% endif %}
 
 [Service]
 ExecStart=/bin/sh -c "! /bin/systemctl is-failed 'borgbackup-tasks@*'"
