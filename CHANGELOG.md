@@ -1,4 +1,4 @@
-## 3.0.5 (XXXX-XX-XX)
+## 3.0.5 (2021-03-14)
 
  - Updated default borg version to 1.1.15.
 
