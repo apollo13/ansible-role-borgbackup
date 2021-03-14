@@ -1,3 +1,7 @@
+## 3.0.5 (XXXX-XX-XX)
+
+ - Updated default borg version to 1.1.15.
+
 ## 3.0.4 (2020-07-31)
 
 - Added support for rate limiting uploads via `borgbackup_remote_ratelimit`.

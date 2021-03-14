@@ -5,7 +5,7 @@ def test_upstream_borg_installed(host):
     assert not host.package("borgbackup").is_installed
     assert host.file("/usr/local/bin/borg").is_file
     cmd = host.run("/usr/local/bin/borg --version")
-    assert cmd.stdout.strip() == "borg 1.1.11"
+    assert cmd.stdout.strip() == "borg 1.1.15"
 
 
 def test_backup(host):

@@ -4,7 +4,7 @@ This role aims to implement a fully managed `borg` setup. The feature list curre
 
  * Client & server configuration, whereas each client gets their own repository.
  * Support for automatically creating repositories on borgbase.com.
- * Backups happens as unprivileged user.
+ * Backups happen as unprivileged user.
  * Automatic configuration of `known_hosts` so even initial connections are a success.
  * Initialization of the repository on the clients.
  * Optional `append-only` mode as well as management configuration for admin access.
@@ -25,9 +25,9 @@ The role allows installation via the OS package manager (default) as well as dir
 ```
 borgbackup_install_method: system|upstream
 ```
-If upstream is chosen, one needs to specify version and checksum (defaults to version `1.1.11`):
+If upstream is chosen, one needs to specify version and checksum (defaults to version `1.1.15`):
 ```
-borgbackup_upstream_version: 1.1.11
+borgbackup_upstream_version: 1.1.15
 borgbackup_upstream_checksum: sha256:7848d1788b5d7f2ae99a599a87992cab4f01584fe5eb393819fceaecf076433b
 ```
 If needed the backup user can be specified:
