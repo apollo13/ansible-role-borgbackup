@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
-    mode: 0700
+    mode: "0700"
   loop:
     - config
     - data
@@ -30,7 +30,7 @@
       {% endfor %}
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Configure exclude patterns
   blockinfile:
@@ -40,7 +40,7 @@
     block: "{{'\n'.join(borgbackup_exclude_patterns) }}"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Install borg wrapper script
   copy:
@@ -51,7 +51,7 @@
       source {{ borgbackup_home }}/config/environment
       set +a
       exec {{ borgbackup_executable }} "$@"
-    mode: 0700
+    mode: "0700"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
 
@@ -59,6 +59,7 @@
   template:
     src: "{{ item }}.j2"
     dest: /etc/systemd/system/{{ item }}
+    mode: "0644"
   loop:
     - borgbackup-tasks.service
     - borgbackup.service
@@ -88,7 +89,7 @@
     dest: "{{ borgbackup_home }}/config/environment"
     owner: "{{ borgbackup_user }}"
     group: "{{ borgbackup_user }}"
-    mode: 0600
+    mode: "0600"
   no_log: yes
 
 - name: Configure and possibly prepare repository
