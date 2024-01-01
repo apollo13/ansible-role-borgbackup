@@ -1,3 +1,9 @@
+## 4.0.0 (2024-01-01)
+
+ - INCOMPATIBLE: Switch default upstream binaries to linuxnew64. They don't work on CentOS 7 and other
+   old systems. One can still adjust `borgbackup_upstream_url`/`borgbackup_upstream_checksum` accordingly.
+ - Updated default borg version to 1.2.7.
+
 ## 3.0.6 (2024-01-01)
 
  - Disable SSH passwort authentication to prevent hanging if the ssh keyfile is not found.

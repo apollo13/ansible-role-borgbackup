@@ -7,7 +7,7 @@ def test_upstream_borg_installed(host):
     cmd = host.run("/usr/local/bin/borg --version")
     # Show the error output if it is not possible to start borg
     assert cmd.stderr.strip() == ""
-    assert cmd.stdout.strip() == "borg 1.1.15"
+    assert cmd.stdout.strip() == "borg 1.2.7"
 
 
 def test_backup(host):
