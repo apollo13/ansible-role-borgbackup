@@ -13,8 +13,7 @@ platforms:
     pull: true
     pre_build_image: true
     override_command: false
-    networks:
-      - name: borgbackup_molecule
+    network: borgbackup_molecule
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     tmpfs:
