@@ -4,9 +4,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   ROLE_NAME: apollo13.borgbackup
@@ -19,11 +19,11 @@ jobs:
       matrix:
         molecule-distro:
           - "centos:7"
-          - "centos:8"
+          - "rockylinux:9"
           - "ubuntu:18.04"
-          - "ubuntu:20.04"
-          - "debian:buster"
-          - "fedora:33"
+          - "ubuntu:22.04"
+          - "debian:bookworm"
+          - "fedora:38"
 
     env:
       MOLECULE_DISTRO: ${{ matrix.molecule-distro }}
@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install wheel
-          python -m pip install molecule[ansible,docker,test,lint]
+          python -m pip install ansible molecule molecule-plugins[docker]
 
       - name: Molecule test
         run: |

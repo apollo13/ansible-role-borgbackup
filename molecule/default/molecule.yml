@@ -1,7 +1,7 @@
 ---
 
 _platform_defaults: &platform_defaults
-  image: registry.gitlab.com/rocketduck/molecule-images/${MOLECULE_DISTRO:-centos:8}
+  image: registry.gitlab.com/rocketduck/molecule-images/${MOLECULE_DISTRO:-rockylinux:9}
   pull: true
   pre_build_image: true
   override_command: false
