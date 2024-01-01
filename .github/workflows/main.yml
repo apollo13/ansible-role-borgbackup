@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install wheel
-          python -m pip install ansible molecule molecule-plugins[docker]
+          python -m pip install ansible molecule[testinfra] molecule-plugins[docker] yamllint ansible-lint flake8
 
       - name: Molecule test
         run: |

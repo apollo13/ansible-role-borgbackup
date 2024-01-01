@@ -1,32 +1,30 @@
 ---
 
-_platform_defaults: &platform_defaults
-  image: registry.gitlab.com/rocketduck/molecule-images/${MOLECULE_DISTRO:-rockylinux:9}
-  pull: true
-  pre_build_image: true
-  override_command: false
-  networks:
-    - name: borgbackup_molecule
-  privileged: true
-  volumes:
-    - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  tmpfs:
-    # disabled because it is mounted as noexec which breaks the borg upstream binary
-    # - /tmp
-    - /run
-  tty: True
-  environment:
-    container: docker
-
 dependency:
   name: galaxy
 driver:
   name: docker
 platforms:
-  - name: borg
+  - &platform_defaults
+    name: borg
     groups:
       - client
-    <<: *platform_defaults
+    image: registry.gitlab.com/rocketduck/molecule-images/${MOLECULE_DISTRO:-rockylinux:9}
+    pull: true
+    pre_build_image: true
+    override_command: false
+    networks:
+      - name: borgbackup_molecule
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    tmpfs:
+      # disabled because it is mounted as noexec which breaks the borg upstream binary
+      # - /tmp
+      - /run
+    tty: True
+    environment:
+      container: docker
   - name: borg-system
     groups:
       - client
