@@ -13,6 +13,7 @@ platforms:
     pull: true
     pre_build_image: true
     override_command: false
+    privileged: true
     network: borgbackup_molecule
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
