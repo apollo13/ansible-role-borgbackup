@@ -3,25 +3,23 @@ dependencies: []
 
 galaxy_info:
   role_name: borgbackup
-  author: Florian Apolloner & contributors
+  author: apollo13
   description: Configure Borgbackup on EL/Ubuntu/Debian. With support for clients & servers, as well as borgbase.com.
   license: MIT
   min_ansible_version: 2.9
   platforms:
     - name: EL
       versions:
-        - 7
-        - 8
+        - all
     - name: Fedora
       versions:
-        - 32
+        - all
     - name: Ubuntu
       versions:
-        - bionic
-        - focal
+        - all
     - name: Debian
       versions:
-        - buster
+        - all
   galaxy_tags:
     - borgbackup
     - backup
