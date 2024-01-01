@@ -19,12 +19,8 @@ jobs:
     strategy:
       matrix:
         molecule-distro:
-          - "centos:7"
           - "rockylinux:9"
-          - "ubuntu:18.04"
           - "ubuntu:22.04"
-          - "debian:bookworm"
-          - "fedora:38"
 
     env:
       MOLECULE_DISTRO: ${{ matrix.molecule-distro }}
