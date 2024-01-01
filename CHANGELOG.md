@@ -1,5 +1,6 @@
-## 3.x.x (xxx-xx-xx)
+## 3.0.6 (2024-01-01)
 
+ - Disable SSH passwort authentication to prevent hanging if the ssh keyfile is not found.
  - Added support for `OnFailure` in systemd services.
 
 ## 3.0.5 (2021-03-14)
