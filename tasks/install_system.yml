@@ -10,6 +10,14 @@
   package:
     name: "{{ borgbackup_system_package_name }}"
     state: present
+  when: ansible_os_family != "Debian"
+
+- name: Install borgbackup
+  apt:
+    name: "{{ borgbackup_system_package_name }}"
+    install_recommends: false
+    state: present
+  when: ansible_os_family == "Debian"
 
 - name: Remove upstream version
   file:
