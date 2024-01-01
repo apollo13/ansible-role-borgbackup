@@ -5,9 +5,9 @@ borgbackup_install_method: system
 # system package to install, there should be no need to change this
 borgbackup_system_package_name: borgbackup
 
-borgbackup_upstream_version: 1.1.15
-borgbackup_upstream_checksum: sha256:9e87a2b19a6d1034abedf3265bbf5f063238246fc56e6087b6ec4a21f29b4239
-borgbackup_upstream_url: https://github.com/borgbackup/borg/releases/download/{{ borgbackup_upstream_version }}/borg-linux64
+borgbackup_upstream_version: 1.2.7
+borgbackup_upstream_checksum: sha256:d8d3313ebaf48ba135001b7f230b494259f112e56adf0d5f952af999742e1190
+borgbackup_upstream_url: https://github.com/borgbackup/borg/releases/download/{{ borgbackup_upstream_version }}/borg-linuxnew64
 
 borgbackup_user: borg
 borgbackup_home: "{% if borgbackup_user == 'root' %}/root/borg{% else %}/home/{{ borgbackup_user }}{% endif %}"
