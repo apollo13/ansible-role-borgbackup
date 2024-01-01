@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: 'apollo13.borgbackup'
+    working-directory: apollo13.borgbackup
 
 jobs:
   test:
@@ -43,3 +43,6 @@ jobs:
 
       - name: Molecule test
         run: molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
